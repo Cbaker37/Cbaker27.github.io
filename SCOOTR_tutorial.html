@@ -1,0 +1,679 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>SCOOTR Tutorial &#8212; SCOOTR</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'SCOOTR_tutorial';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/SCOOTR_logo.006.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/SCOOTR_logo.006.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to SCOOTR
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Core Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="installation_instructions.html">Getting Set Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory.html">The Evolution of SCOOTR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup_tutorial.html">Setup Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UGW_tutorial.html">UGW Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UCOOT_tutorial.html">UCOOT Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fused_tutorial.html">Fused Formulation Tutorial</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Exploration on Real World Datasets</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="RNAseq.html">Time Series Experiment</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/Cbaker37/SCOOTR.git" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Cbaker37/SCOOTR.git/issues/new?title=Issue%20on%20page%20%2FSCOOTR_tutorial.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/SCOOTR_tutorial.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>SCOOTR Tutorial</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="scootr-tutorial">
+<h1>SCOOTR Tutorial<a class="headerlink" href="#scootr-tutorial" title="Permalink to this heading">#</a></h1>
+<p>TO DO:</p>
+<p>Make sure to increase nits for emd</p>
+<p>In this tutorial, we will examine our newest tool, SCOOTR. SCOOTR blends together UGW and UCOOT to incentivise sample alignments that are  informed by both feature data and local geometry.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you want to know more about how and why SCOOTR works, see our document on the evolution of optimal transport algorithms for sample alignment. In addition, if you have not yet seen our UGW and UCOOT tutorials, we recommend viewing those first to get a sense of what SCOOTR is doing under the hood.</p>
+</div>
+<p>To begin, we will load in our preprocessed data. If you would like to preprocess the data in your own way, you can download the raw files for this dataset by running “sh download_scripts/CITEseq_download.sh” from the root of your SCOOTR directory. They will be loaded into the same folder as the preprocessed datasets.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="kn">import</span> <span class="nn">src.megawass</span> <span class="k">as</span> <span class="nn">mw</span>
+<span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">umap</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">normalize</span>
+
+<span class="n">X_raw</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;./data/CITEseq/citeseq_adt_normalized_1000cells.csv&quot;</span><span class="p">)</span>
+<span class="n">y_raw</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;./data/CITEseq/citeseq_rna_normalizedFC_1000cells.csv&quot;</span><span class="p">)</span>
+<span class="n">x_feat_labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD11a&quot;</span><span class="p">,</span><span class="s2">&quot;CD11c&quot;</span><span class="p">,</span><span class="s2">&quot;CD123&quot;</span><span class="p">,</span><span class="s2">&quot;CD127-IL7Ra&quot;</span><span class="p">,</span><span class="s2">&quot;CD14&quot;</span><span class="p">,</span><span class="s2">&quot;CD16&quot;</span><span class="p">,</span><span class="s2">&quot;CD161&quot;</span><span class="p">,</span><span class="s2">&quot;CD19&quot;</span><span class="p">,</span><span class="s2">&quot;CD197-CCR7&quot;</span><span class="p">,</span><span class="s2">&quot;CD25&quot;</span><span class="p">,</span><span class="s2">&quot;CD27&quot;</span><span class="p">,</span><span class="s2">&quot;CD278-ICOS&quot;</span><span class="p">,</span><span class="s2">&quot;CD28&quot;</span><span class="p">,</span><span class="s2">&quot;CD3&quot;</span><span class="p">,</span><span class="s2">&quot;CD34&quot;</span><span class="p">,</span><span class="s2">&quot;CD38&quot;</span><span class="p">,</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span><span class="s2">&quot;CD45RA&quot;</span><span class="p">,</span><span class="s2">&quot;CD45RO&quot;</span><span class="p">,</span><span class="s2">&quot;CD56&quot;</span><span class="p">,</span><span class="s2">&quot;CD57&quot;</span><span class="p">,</span><span class="s2">&quot;CD69&quot;</span><span class="p">,</span><span class="s2">&quot;CD79b&quot;</span><span class="p">,</span><span class="s2">&quot;CD8a&quot;</span><span class="p">,</span><span class="s2">&quot;HLA.DR&quot;</span><span class="p">]</span>
+<span class="n">y_feat_labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ITGAL&quot;</span><span class="p">,</span><span class="s2">&quot;ITGAX&quot;</span><span class="p">,</span><span class="s2">&quot;IL3RA&quot;</span><span class="p">,</span><span class="s2">&quot;IL7R&quot;</span><span class="p">,</span><span class="s2">&quot;CD14&quot;</span><span class="p">,</span><span class="s2">&quot;FCGR3A&quot;</span><span class="p">,</span><span class="s2">&quot;KLRB1&quot;</span><span class="p">,</span><span class="s2">&quot;CD19&quot;</span><span class="p">,</span><span class="s2">&quot;CCR7&quot;</span><span class="p">,</span><span class="s2">&quot;IL2RA&quot;</span><span class="p">,</span><span class="s2">&quot;CD27&quot;</span><span class="p">,</span><span class="s2">&quot;ICOS&quot;</span><span class="p">,</span><span class="s2">&quot;CD28&quot;</span><span class="p">,</span><span class="s2">&quot;CD3E&quot;</span><span class="p">,</span><span class="s2">&quot;CD34&quot;</span><span class="p">,</span><span class="s2">&quot;CD38&quot;</span><span class="p">,</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span><span class="s2">&quot;PTPRC&quot;</span><span class="p">,</span><span class="s2">&quot;PTPRC&quot;</span><span class="p">,</span><span class="s2">&quot;NCAM1&quot;</span><span class="p">,</span><span class="s2">&quot;B3GAT1&quot;</span><span class="p">,</span><span class="s2">&quot;CD69&quot;</span><span class="p">,</span><span class="s2">&quot;CD79B&quot;</span><span class="p">,</span><span class="s2">&quot;CD8A&quot;</span><span class="p">,</span><span class="s2">&quot;HLA-DRA&quot;</span><span class="p">]</span> 
+<span class="n">samp_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Cell </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X_raw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">src.megawass</span> <span class="k">as</span> <span class="nn">mw</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;src.megawass&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>From here, we can load our data into usable DataFrames.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_full_annotated</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">normalize</span><span class="p">(</span><span class="n">normalize</span><span class="p">(</span><span class="n">X_raw</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">X_full_annotated</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">X_full_annotated</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">samp_labels</span><span class="p">,</span> <span class="n">x_feat_labels</span>
+<span class="n">y_full_annotated</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">normalize</span><span class="p">(</span><span class="n">y_raw</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">y_full_annotated</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">y_full_annotated</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">samp_labels</span><span class="p">,</span> <span class="n">y_feat_labels</span>
+
+<span class="n">X_full</span> <span class="o">=</span> <span class="n">X_full_annotated</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">y_full</span> <span class="o">=</span> <span class="n">y_full_annotated</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+<span class="n">X_annotated</span> <span class="o">=</span> <span class="n">X_full_annotated</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+<span class="n">y_annotated</span> <span class="o">=</span> <span class="n">y_full_annotated</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">X_annotated</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">y_annotated</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">X_full_annotated</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">normalize</span><span class="p">(</span><span class="n">normalize</span><span class="p">(</span><span class="n">X_raw</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">X_full_annotated</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">X_full_annotated</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">samp_labels</span><span class="p">,</span> <span class="n">x_feat_labels</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">y_full_annotated</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">normalize</span><span class="p">(</span><span class="n">y_raw</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="ne">NameError</span>: name &#39;pd&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<p>From here, we can instantiate a MegaWass object to begin aligning our data.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>See our setup tutorial to get a better understanding of the initial parameters for the MegaWass tool.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">megawass</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">MegaWass</span><span class="p">(</span><span class="n">nits_bcd</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>From here, we can begin by establishing pairwise distance matrices for our domains, as per the UGW tutorial:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_full</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;./data/CITEseq/cite_adt_1000cells.npy&quot;</span><span class="p">)</span>
+<span class="n">y_full</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;./data/CITEseq/cite_rna_1000cells.npy&quot;</span><span class="p">)</span>
+
+<span class="n">X_full</span><span class="o">=</span><span class="n">normalize</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">X_full</span><span class="p">))</span>
+<span class="n">y_full</span><span class="o">=</span><span class="n">normalize</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">y_full</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># knn connectivity distance</span>
+<span class="n">Dx_knn</span> <span class="o">=</span> <span class="n">megawass</span><span class="o">.</span><span class="n">compute_graph_distances</span><span class="p">(</span><span class="n">X_full</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;connectivity&#39;</span><span class="p">)</span>
+<span class="n">Dy_knn</span> <span class="o">=</span> <span class="n">megawass</span><span class="o">.</span><span class="n">compute_graph_distances</span><span class="p">(</span><span class="n">y_full</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;connectivity&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Dx_knn</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[ 0., 17.,  2., ..., 17., 17.,  4.],
+       [17.,  0., 15., ...,  4.,  2., 16.],
+       [ 2., 15.,  0., ..., 15., 15.,  3.],
+       ...,
+       [17.,  4., 15., ...,  0.,  4., 16.],
+       [17.,  2., 15., ...,  4.,  0., 16.],
+       [ 4., 16.,  3., ..., 16., 16.,  0.]])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Dx_knn</span> <span class="o">=</span> <span class="n">megawass</span><span class="o">.</span><span class="n">knn_dist</span><span class="p">(</span><span class="n">X_full</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Dx_knn</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[0.        , 0.89473684, 0.10526316, ..., 0.89473684, 0.89473684,
+        0.21052632],
+       [0.89473684, 0.        , 0.78947368, ..., 0.21052632, 0.10526316,
+        0.84210526],
+       [0.10526316, 0.78947368, 0.        , ..., 0.78947368, 0.78947368,
+        0.15789474],
+       ...,
+       [0.89473684, 0.21052632, 0.78947368, ..., 0.        , 0.21052632,
+        0.84210526],
+       [0.89473684, 0.10526316, 0.78947368, ..., 0.21052632, 0.        ,
+        0.84210526],
+       [0.21052632, 0.84210526, 0.15789474, ..., 0.84210526, 0.84210526,
+        0.        ]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we can try a standard SCOOTR alignment.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">pi_samp</span><span class="p">,</span> <span class="n">pi_feat</span><span class="p">),</span> <span class="n">_</span><span class="p">,</span> <span class="n">log</span> <span class="o">=</span> <span class="n">megawass</span><span class="o">.</span><span class="n">agw_scootr</span><span class="p">(</span><span class="n">X_full</span><span class="p">,</span> <span class="n">y_full</span><span class="p">,</span> <span class="n">Dx_knn</span><span class="p">,</span> <span class="n">Dy_knn</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">sample_eps</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">feature_eps</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">log</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/ot/lp/__init__.py:346: UserWarning: numItermax reached before optimality. Try to increase numItermax.
+  result_code_string = check_result(result_code)
+/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/scipy/optimize/_linesearch.py:709: RuntimeWarning: divide by zero encountered in scalar divide
+  alpha2 = (-b + np.sqrt(abs(b**2 - 3 * a * derphi0))) / (3.0*a)
+/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/numpy/core/fromnumeric.py:86: RuntimeWarning: invalid value encountered in reduce
+  return ufunc.reduce(obj, axis, dtype, out, **passkwargs)
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NonConvergenceError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="p">(</span><span class="n">pi_samp</span><span class="p">,</span> <span class="n">pi_feat</span><span class="p">),</span> <span class="n">_</span><span class="p">,</span> <span class="n">log</span> <span class="o">=</span> <span class="n">megawass</span><span class="o">.</span><span class="n">agw_scootr</span><span class="p">(</span><span class="n">X_full</span><span class="p">,</span> <span class="n">y_full</span><span class="p">,</span> <span class="n">Dx_knn</span><span class="p">,</span> <span class="n">Dy_knn</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">sample_eps</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">feature_eps</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">log</span>
+
+<span class="nn">File ~/Desktop/SinghLab/SCOOTR/ucoot/src/megawass.py:414,</span> in <span class="ni">MegaWass.agw_scootr</span><span class="nt">(self, X, y, X_d, y_d, px, py, alpha, sample_uot_mode, sample_eps, feature_uot_mode, feature_eps, verbose, log, scaleCost, random_init, C_lin, supervised)</span>
+<span class="g g-Whitespace">    </span><span class="mi">412</span>         <span class="n">M</span><span class="o">=</span><span class="p">(</span><span class="n">M</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">M</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">M</span><span class="p">)</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">M</span><span class="p">))</span>
+<span class="g g-Whitespace">    </span><span class="mi">413</span>     <span class="c1">#note, the interpolation with gw is computed within cg(), and scaling of gw is also handled there beforehand if scaleCost=True.</span>
+<span class="ne">--&gt; </span><span class="mi">414</span>     <span class="n">Ts</span><span class="o">=</span><span class="n">cg</span><span class="p">(</span><span class="n">px</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">py</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">M</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">G0</span><span class="o">=</span><span class="n">Ts</span><span class="p">,</span><span class="n">amijo</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">C1</span><span class="o">=</span><span class="n">X_d</span><span class="p">,</span><span class="n">C2</span><span class="o">=</span><span class="n">y_d</span><span class="p">,</span> <span class="n">constC</span><span class="o">=</span><span class="n">constC_gw</span><span class="p">,</span> <span class="n">hC1</span><span class="o">=</span><span class="n">hC1_gw</span><span class="p">,</span> <span class="n">hC2</span><span class="o">=</span><span class="n">hC2_gw</span><span class="p">,</span> <span class="n">scaleCost</span><span class="o">=</span><span class="n">scaleCost</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">415</span> <span class="k">elif</span> <span class="n">sample_uot_mode</span><span class="o">==</span><span class="s2">&quot;sinkhorn&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">416</span>     <span class="n">gw</span><span class="o">=</span><span class="n">ot</span><span class="o">.</span><span class="n">gromov</span><span class="o">.</span><span class="n">gwggrad</span><span class="p">(</span><span class="n">constC_gw</span><span class="p">,</span><span class="n">hC1_gw</span><span class="p">,</span><span class="n">hC2_gw</span><span class="p">,</span><span class="n">Ts</span><span class="p">)</span>
+
+<span class="nn">File ~/Desktop/SinghLab/SCOOTR/ucoot/src/agw_optim.py:256,</span> in <span class="ni">cg</span><span class="nt">(a, b, M, reg, C1, C2, G0, constC, hC1, hC2, scaleCost, numItermax, stopThr, verbose, log, amijo)</span>
+<span class="g g-Whitespace">    </span><span class="mi">253</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">fc</span><span class="p">,</span> <span class="n">f_val</span> <span class="o">=</span> <span class="n">do_linesearch</span><span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="n">cost</span><span class="p">,</span><span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span><span class="n">deltaG</span><span class="o">=</span><span class="n">deltaG</span><span class="p">,</span><span class="n">Mi</span><span class="o">=</span><span class="n">Mi</span><span class="p">,</span><span class="n">f_val</span><span class="o">=</span><span class="n">f_val</span><span class="p">,</span><span class="n">amijo</span><span class="o">=</span><span class="n">amijo</span><span class="p">,</span><span class="n">constC</span><span class="o">=</span><span class="n">constC</span><span class="p">,</span><span class="n">C1</span><span class="o">=</span><span class="n">C1</span><span class="p">,</span><span class="n">C2</span><span class="o">=</span><span class="n">C2</span><span class="p">,</span><span class="n">reg</span><span class="o">=</span><span class="n">reg</span><span class="p">,</span><span class="n">Gc</span><span class="o">=</span><span class="n">Gc</span><span class="p">,</span><span class="n">M</span><span class="o">=</span><span class="n">M</span><span class="p">,</span> <span class="n">scaleCost</span><span class="o">=</span><span class="n">scaleCost</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">255</span> <span class="k">if</span> <span class="n">alpha</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span> <span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">256</span> 	<span class="k">raise</span> <span class="n">NonConvergenceError</span><span class="p">(</span><span class="s1">&#39;Alpha not found&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">257</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">258</span> 	<span class="n">G</span> <span class="o">=</span> <span class="n">G</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">deltaG</span> <span class="c1">#xt+1=xt +alpha dt</span>
+
+<span class="ne">NonConvergenceError</span>: Alpha not found
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">pi_samp</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;rocket_r&#39;</span><span class="p">,</span> <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">pi_feat</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;rocket_r&#39;</span><span class="p">,</span> <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">pi_samp</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;rocket_r&#39;</span><span class="p">,</span> <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">pi_feat</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;rocket_r&#39;</span><span class="p">,</span> <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;pi_samp&#39; is not defined
+</pre></div>
+</div>
+<img alt="_images/0cbb767a0e40210c87d1526085b1086c588da612df74669c347e8364bb31b09e.png" src="_images/0cbb767a0e40210c87d1526085b1086c588da612df74669c347e8364bb31b09e.png" />
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By R. Singh
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

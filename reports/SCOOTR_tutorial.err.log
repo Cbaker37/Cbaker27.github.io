@@ -1,0 +1,42 @@
+Traceback (most recent call last):
+  File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/nbclient/client.py", line 1305, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/jupyter_core/utils/__init__.py", line 166, in wrapped
+    return loop.run_until_complete(inner)
+  File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/asyncio/base_events.py", line 647, in run_until_complete
+    return future.result()
+  File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/nbclient/client.py", line 705, in async_execute
+    await self.async_execute_cell(
+  File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/nbclient/client.py", line 1058, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+X_full_annotated = pd.DataFrame(normalize(normalize(X_raw.X, norm='l2', axis=1).transpose(), norm='l2', axis=1))
+X_full_annotated.index, X_full_annotated.columns = samp_labels, x_feat_labels
+y_full_annotated = pd.DataFrame(normalize(y_raw.transpose().X, norm='l2', axis=1))
+y_full_annotated.index, y_full_annotated.columns = samp_labels, y_feat_labels
+
+X_full = X_full_annotated.to_numpy()
+y_full = y_full_annotated.to_numpy()
+
+X_annotated = X_full_annotated.iloc[:,0:10]
+y_annotated = y_full_annotated.iloc[:,0:10]
+
+X = X_annotated.to_numpy()
+y = y_annotated.to_numpy()
+------------------
+
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mNameError[0m                                 Traceback (most recent call last)
+Cell [0;32mIn[2], line 1[0m
+[0;32m----> 1[0m X_full_annotated [38;5;241m=[39m [43mpd[49m[38;5;241m.[39mDataFrame(normalize(normalize(X_raw[38;5;241m.[39mX, norm[38;5;241m=[39m[38;5;124m'[39m[38;5;124ml2[39m[38;5;124m'[39m, axis[38;5;241m=[39m[38;5;241m1[39m)[38;5;241m.[39mtranspose(), norm[38;5;241m=[39m[38;5;124m'[39m[38;5;124ml2[39m[38;5;124m'[39m, axis[38;5;241m=[39m[38;5;241m1[39m))
+[1;32m      2[0m X_full_annotated[38;5;241m.[39mindex, X_full_annotated[38;5;241m.[39mcolumns [38;5;241m=[39m samp_labels, x_feat_labels
+[1;32m      3[0m y_full_annotated [38;5;241m=[39m pd[38;5;241m.[39mDataFrame(normalize(y_raw[38;5;241m.[39mtranspose()[38;5;241m.[39mX, norm[38;5;241m=[39m[38;5;124m'[39m[38;5;124ml2[39m[38;5;124m'[39m, axis[38;5;241m=[39m[38;5;241m1[39m))
+
+[0;31mNameError[0m: name 'pd' is not defined
+
