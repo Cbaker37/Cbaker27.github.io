@@ -8,6 +8,8 @@ We have found SCOOTR to be particularly relevant to single-cell multi-omics data
 
 The following tutorials contain enough information to help you understand optimal transport for the purpose of aligning your data, including its few hyperparameters and optimization procedure. In addition, they will help you understand how our package works in practice on real world datasets. Equipped with the knowledge of how to use our package theoretically and in practice, you will be able to apply SCOOTR to any datasets you may have.
 
+We would like to thank the Executable Book Project for making this draft possible.
+
 ## Table of Contents
 
 ```{tableofcontents}
