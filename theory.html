@@ -166,10 +166,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="UGW_tutorial.html">UGW Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="UCOOT_tutorial.html">UCOOT Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fused_tutorial.html">Fused Formulation Tutorial</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Exploration on Real World Datasets</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="RNAseq.html">Time Series Experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SCOOTR_tutorial.html">SCOOTR Tutorial</a></li>
 </ul>
 
     </div>
@@ -402,13 +399,6 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="the-evolution-of-scootr">
 <h1>The Evolution of SCOOTR<a class="headerlink" href="#the-evolution-of-scootr" title="Permalink to this heading">#</a></h1>
-<p>TO DO:</p>
-<ul class="simple">
-<li><p>fix math/notation (something is wrong, after now reading Pinar’s latest paper)</p></li>
-<li><p>Confirm Kantorovich</p></li>
-<li><p>Decide whether to use SCOOTR or AGW as main acronym for the alpha*GW + (1-alpha)*COOT
-formulation</p></li>
-</ul>
 <p>We will begin by examining the evolution of optimal transport formulations, and then
 enter into a brief description of our application of these formulations.</p>
 <section id="formulations">
@@ -530,11 +520,11 @@ pairwise distances, <span class="math notranslate nohighlight">\(D_{\mu_{ij}}\)<
 function and minimization problem for GW:</p>
 <p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\Sigma_{i = 1}^{n_\mu}\Sigma_{j = 1}^{n_\mu}\Sigma_{k = 1}^{n_\nu}\Sigma_{l = 1}^{n_\nu} (L(D_{\mu_{ij}}, D_{\nu_{kl}})\pi(x_i, y_k)\pi(x_j, y_l)))\)</span></p>
 <p>which can also be expressed as the inner product:</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\langle L(D_\mu, D_\nu), \pi \otimes \pi \rangle)\)</span>,</p>
+<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\langle L(D_\mu, D_\nu) \otimes \pi, \pi \rangle)\)</span>,</p>
 <p>where <span class="math notranslate nohighlight">\(\otimes\)</span> is the tensor product.</p>
 <p>Just as in OT, adding entropic regularization allows us to use Sinkhorn-like iterations
 when we find the new cost-minimizing <span class="math notranslate nohighlight">\(\pi\)</span>:</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\langle L(D_\mu, D_\nu), \pi \otimes \pi \rangle) - \epsilon \langle \pi, \log \pi \rangle\)</span></p>
+<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\langle L(D_\mu, D_\nu) \otimes \pi, \pi \rangle) - \epsilon \langle \pi, \log \pi \rangle\)</span></p>
 <p>Now, we move onto the unbalanced version of this formulation.</p>
 </section>
 <section id="unbalanced-gromov-wasserstein-optimal-transport-ugw">

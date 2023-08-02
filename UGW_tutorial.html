@@ -166,10 +166,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">UGW Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="UCOOT_tutorial.html">UCOOT Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fused_tutorial.html">Fused Formulation Tutorial</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Exploration on Real World Datasets</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="RNAseq.html">Time Series Experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SCOOTR_tutorial.html">SCOOTR Tutorial</a></li>
 </ul>
 
     </div>
@@ -383,12 +380,6 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="ugw-tutorial">
 <h1>UGW Tutorial<a class="headerlink" href="#ugw-tutorial" title="Permalink to this heading">#</a></h1>
-<p>To do:</p>
-<ul class="simple">
-<li><p>delete? coupling matrix visuals</p></li>
-<li><p>decide on last ex</p></li>
-<li><p>continue latexing</p></li>
-</ul>
 <p>In this tutorial, we will examine how to use Gromov-Wasserstein (GW) and unbalanced Gromov-Wasserstein (UGW) to align a CITEseq dataset, which has co-assayed antibody and gene expression data on 7985 human/mouse blood cells. We select 1000 human samples from this dataset, and split the data into two matrices: one that contains antibody information on these samples and another that contains gene expression information on the same samples. The goal in this tutorial (as well as UCOOT) will be to recover which sample matches with which sample using optimal transport. So, we are trying to recover a 1-1 mapping that we know exists.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -444,6 +435,7 @@ CUDNN version: None
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">import</span> <span class="nn">umap</span>
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">normalize</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Helvetica Neue&#39;</span>
 
 <span class="n">X_raw</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;./data/CITEseq/citeseq_adt_normalized_1000cells.csv&quot;</span><span class="p">)</span>
 <span class="n">y_raw</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;./data/CITEseq/citeseq_rna_normalizedFC_1000cells.csv&quot;</span><span class="p">)</span>
@@ -481,29 +473,28 @@ CUDNN version: None
 <p>Now that we have our data, we visualize it with two dimensionality reduction techniques: UMAP and PCA. These visualization techniques can be helpful for visualizing any intermediate steps through this project, although our eventual coupling matrices are better visualized with a heatmap.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">um</span> <span class="o">=</span> <span class="n">umap</span><span class="o">.</span><span class="n">UMAP</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">um</span> <span class="o">=</span> <span class="n">umap</span><span class="o">.</span><span class="n">UMAP</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="n">originalX_um</span><span class="o">=</span><span class="n">um</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="n">originaly_um</span><span class="o">=</span><span class="n">um</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
 <span class="c1">#Visualization of the global geometry</span>
-<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span><span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span><span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">originalX_um</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">originalX_um</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;ADT Domain </span><span class="se">\n</span><span class="s2"> before Alignment&quot;</span><span class="p">)</span>
-<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">originaly_um</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">originaly_um</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">originaly_um</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">originaly_um</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Gene Expression Domain </span><span class="se">\n</span><span class="s2"> before Alignment&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/765889f8945de7ff6b302e72a4cb16ca29d52a09913f5143ad068c8a31813ed6.png" src="_images/765889f8945de7ff6b302e72a4cb16ca29d52a09913f5143ad068c8a31813ed6.png" />
+<img alt="_images/9976b46cdd636a2f8286ee128b902ce4ce053f8b50a91507d5f10da6da4eb3e0.png" src="_images/9976b46cdd636a2f8286ee128b902ce4ce053f8b50a91507d5f10da6da4eb3e0.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
 
 <span class="n">pca</span><span class="o">=</span><span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
@@ -511,17 +502,18 @@ CUDNN version: None
 <span class="n">originaly_pca</span><span class="o">=</span><span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
 <span class="c1">#Visualization of the global geometry</span>
-<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span><span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span><span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">originalX_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">originalX_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;ADT Domain </span><span class="se">\n</span><span class="s2"> before Alignment&quot;</span><span class="p">)</span>
-<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">originaly_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">originaly_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Gene Expression Domain </span><span class="se">\n</span><span class="s2"> before Alignment&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;ADT Domain </span><span class="se">\n</span><span class="s2"> Before Alignment&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">originaly_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">originaly_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Gene Expression Domain </span><span class="se">\n</span><span class="s2"> Before Alignment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;pre.png&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2d5ffced1b543f91bc68687ff77e3c3065a3098355062a27dfe59789b7cd5ade.png" src="_images/2d5ffced1b543f91bc68687ff77e3c3065a3098355062a27dfe59789b7cd5ade.png" />
+<img alt="_images/698944853dae34f736faf9a5bb0bffa10c81e7dc3e4f7af0ea7dfbe26bdf535a.png" src="_images/698944853dae34f736faf9a5bb0bffa10c81e7dc3e4f7af0ea7dfbe26bdf535a.png" />
 </div>
 </div>
 </section>
@@ -607,9 +599,9 @@ CUDNN version: None
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fracs</span> <span class="o">=</span> <span class="n">scootr</span><span class="o">.</span><span class="n">calc_domainAveraged_FOSCTTM</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">aligned_y</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average FOSCTTM score for this alignment with X onto Y is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">fracs</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average FOSCTTM score for this alignment with X onto Y is:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">fracs</span><span class="p">))</span>
 <span class="n">legend_label</span><span class="o">=</span><span class="s2">&quot;UGW alignment FOSCTTM </span><span class="se">\n</span><span class="s2"> average value: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">fracs</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fracs</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">fracs</span><span class="p">),</span> <span class="s2">&quot;r--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">legend_label</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fracs</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">fracs</span><span class="p">),</span> <span class="s2">&quot;b--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">legend_label</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Cells&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Sorted FOSCTTM&quot;</span><span class="p">)</span>
@@ -618,24 +610,22 @@ CUDNN version: None
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Average FOSCTTM score for this alignment with X onto Y is:  0.5619134134134134
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Average FOSCTTM score for this alignment with X onto Y is: 0.5619134134134134
 </pre></div>
 </div>
-<img alt="_images/ec7d0ccafef78534deaae8cb7c08ccbf03f379a7a42af649964600fbb476a825.png" src="_images/ec7d0ccafef78534deaae8cb7c08ccbf03f379a7a42af649964600fbb476a825.png" />
+<img alt="_images/afcd474fbb0a1fdce947fbc74a50d55fffada42704ac367a014c133b8a442b0a.png" src="_images/afcd474fbb0a1fdce947fbc74a50d55fffada42704ac367a014c133b8a442b0a.png" />
 </div>
 </div>
 <p>With the newly aligned data, we can now see how the alignment looks on UMAP and PCA:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">um</span> <span class="o">=</span> <span class="n">umap</span><span class="o">.</span><span class="n">UMAP</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-<span class="n">Xy_um</span><span class="o">=</span><span class="n">um</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X</span><span class="p">,</span> <span class="n">aligned_y</span><span class="o">.</span><span class="n">numpy</span><span class="p">()),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Xy_um</span><span class="o">=</span><span class="n">um</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X</span><span class="p">,</span> <span class="n">aligned_y</span><span class="o">.</span><span class="n">numpy</span><span class="p">()),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 
 <span class="n">X_um</span><span class="o">=</span><span class="n">Xy_um</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1000</span><span class="p">,]</span>
 <span class="n">y_um</span><span class="o">=</span><span class="n">Xy_um</span><span class="p">[</span><span class="mi">1000</span><span class="p">:,]</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_um</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_um</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ADT&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">y_um</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_um</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Gene Expression&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">y_um</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_um</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Gene Expression&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Colored based on domains&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -643,7 +633,7 @@ CUDNN version: None
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/3228b97c0700c79be26fd47a9e9deb80cba5497ab14404d5877ca84d39080e11.png" src="_images/3228b97c0700c79be26fd47a9e9deb80cba5497ab14404d5877ca84d39080e11.png" />
+<img alt="_images/b799581fd812a465ed6bd9d31b9fb860da86b8a2a576abc432d0e66d695d6abb.png" src="_images/b799581fd812a465ed6bd9d31b9fb860da86b8a2a576abc432d0e66d695d6abb.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -654,8 +644,8 @@ CUDNN version: None
 <span class="n">y_pca</span><span class="o">=</span><span class="n">Xy_pca</span><span class="p">[</span><span class="mi">1000</span><span class="p">:,]</span>
 
 <span class="c1"># Plot aligned domains, samples colored by domain identity:</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">y_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Gene Expression&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ADT&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">y_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Gene Expression&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Colored based on domains&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -663,7 +653,7 @@ CUDNN version: None
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/826a4012df73ba331032674edc5fe2ac27f23768a91a7a4aed585615e7a6fad0.png" src="_images/826a4012df73ba331032674edc5fe2ac27f23768a91a7a4aed585615e7a6fad0.png" />
+<img alt="_images/531c0f8a004a5a49eb01f36b0076f4976ead1c925d47d004ee6e8ad0e53836e5.png" src="_images/531c0f8a004a5a49eb01f36b0076f4976ead1c925d47d004ee6e8ad0e53836e5.png" />
 </div>
 </div>
 <p>Note that the alignments look nice (the shapes match up well). This property does not guarantee a good alignment, as we can see by our high original FOSCTTM score. In fact, it is more a representation of the sparsity of the coupling matrix – if the coupling matrix is very sparse, it will get close to attempting a 1-1 matching, which could be wrong (even though it is 1-1). Having a coupling matrix that is too sparse can be quite dangerous in cases where there is no underlying 1-1 sample map.</p>
@@ -736,9 +726,9 @@ Total sum of differences: 0.014399499632418156
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">aligned_y</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">aligned_y_sm</span><span class="p">,</span> <span class="s1">&#39;eps=1e-5&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">aligned_y_med</span><span class="p">,</span> <span class="s1">&#39;eps=1e-3&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">aligned_y_lg</span><span class="p">,</span> <span class="s1">&#39;eps=1e-1&#39;</span><span class="p">)]:</span>
     <span class="n">fracs</span> <span class="o">=</span> <span class="n">scootr</span><span class="o">.</span><span class="n">calc_domainAveraged_FOSCTTM</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">aligned_y</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average FOSCTTM score for this alignment (</span><span class="si">{0}</span><span class="s2">) with X onto Y is: &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">fracs</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average FOSCTTM score for this alignment (</span><span class="si">{0}</span><span class="s2">) with X onto Y is:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">fracs</span><span class="p">))</span>
     <span class="n">legend_label</span><span class="o">=</span><span class="s2">&quot;UGW alignment FOSCTTM </span><span class="se">\n</span><span class="s2"> average value for </span><span class="si">{0}</span><span class="s2">: &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">size</span><span class="p">)</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">fracs</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fracs</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">fracs</span><span class="p">),</span> <span class="s2">&quot;r--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">legend_label</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fracs</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">fracs</span><span class="p">),</span> <span class="s2">&quot;b--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">legend_label</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Cells&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Sorted FOSCTTM&quot;</span><span class="p">)</span>
@@ -747,18 +737,18 @@ Total sum of differences: 0.014399499632418156
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Average FOSCTTM score for this alignment (eps=1e-5) with X onto Y is:  0.5090595595595596
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Average FOSCTTM score for this alignment (eps=1e-5) with X onto Y is: 0.5090595595595596
 </pre></div>
 </div>
-<img alt="_images/7b1c077503fa83fa1f8ea31325d42c4cfc132ad8d5b1a4516a1d3072876598e9.png" src="_images/7b1c077503fa83fa1f8ea31325d42c4cfc132ad8d5b1a4516a1d3072876598e9.png" />
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Average FOSCTTM score for this alignment (eps=1e-3) with X onto Y is:  0.5489309309309309
+<img alt="_images/c90e34d74c9718f161b3d4e58d8f2b3b29b36f4c72e0940358da85a4c518a7c8.png" src="_images/c90e34d74c9718f161b3d4e58d8f2b3b29b36f4c72e0940358da85a4c518a7c8.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Average FOSCTTM score for this alignment (eps=1e-3) with X onto Y is: 0.5489309309309309
 </pre></div>
 </div>
-<img alt="_images/56d78630790b98c50920ba2bbf59f666417ba03acdc63f4639c4f6aa358ac528.png" src="_images/56d78630790b98c50920ba2bbf59f666417ba03acdc63f4639c4f6aa358ac528.png" />
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Average FOSCTTM score for this alignment (eps=1e-1) with X onto Y is:  0.41506306306306306
+<img alt="_images/c826a0daf9ada0d93fff5ddcbbded29f5d3b79df06651ae2393241797837c47b.png" src="_images/c826a0daf9ada0d93fff5ddcbbded29f5d3b79df06651ae2393241797837c47b.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Average FOSCTTM score for this alignment (eps=1e-1) with X onto Y is: 0.41506306306306306
 </pre></div>
 </div>
-<img alt="_images/bb7f07acc83b7ab02842856395032ab4bd5e425c554f9d6c32c7b5bba6efe819.png" src="_images/bb7f07acc83b7ab02842856395032ab4bd5e425c554f9d6c32c7b5bba6efe819.png" />
+<img alt="_images/97854d4e1ec1edebd6b47907890f7af55d4ac468419677799dbe2bd092c68d20.png" src="_images/97854d4e1ec1edebd6b47907890f7af55d4ac468419677799dbe2bd092c68d20.png" />
 </div>
 </div>
 <p>Note that a smaller value of <span class="math notranslate nohighlight">\(\epsilon\)</span> does not necessarily guarantee better alignment quality. In fact, since smaller <span class="math notranslate nohighlight">\(\epsilon\)</span> encourages sparsity, it could lead to the sparsity pitfalls (confidently incorrect matchings) we looked at earlier in this section. To find the <span class="math notranslate nohighlight">\(\epsilon\)</span> best for your particular data, you can do a search of a given log space:</p>
@@ -766,7 +756,6 @@ Total sum of differences: 0.014399499632418156
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># an example of epsilon search</span>
 <span class="n">pi_samp_dt</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">pi_feat_dt</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="c1"># for val in np.logspace(start=-6, stop=-1, num=10):</span>
     <span class="c1"># (pi_samp_dt[val], _), _ = scootr.solver_fgw(Dx_knn, Dy_knn, eps=val)</span>
 </pre></div>
@@ -777,30 +766,28 @@ Total sum of differences: 0.014399499632418156
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">pi_samp</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">pi_samp_sm</span><span class="p">,</span> <span class="s1">&#39;eps=1e-5&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">pi_samp_med</span><span class="p">,</span> <span class="s1">&#39;eps=1e-3&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">pi_samp_lg</span><span class="p">,</span> <span class="s1">&#39;eps=1e-1&#39;</span><span class="p">)]:</span>    
-    <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">pi_samp</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;rocket_r&#39;</span><span class="p">)</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">pi_samp</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/8a8abfb4524318b20e06b6899053c9dbe9fe02abec2e6260bfb11d6b784c0d16.png" src="_images/8a8abfb4524318b20e06b6899053c9dbe9fe02abec2e6260bfb11d6b784c0d16.png" />
-<img alt="_images/0f1568c7ac9ebb8ffe9075c89b91fb3ad697ae06336e16c69512f485d609f599.png" src="_images/0f1568c7ac9ebb8ffe9075c89b91fb3ad697ae06336e16c69512f485d609f599.png" />
-<img alt="_images/d38a7ce2bd08a8671075a6f31b1076c76f956d784602e8dadf2a3ebd842df166.png" src="_images/d38a7ce2bd08a8671075a6f31b1076c76f956d784602e8dadf2a3ebd842df166.png" />
+<img alt="_images/e9a9964b31694c1a079f63b6b6357d5156c9bf69544b19a7baef13e40c2fa34f.png" src="_images/e9a9964b31694c1a079f63b6b6357d5156c9bf69544b19a7baef13e40c2fa34f.png" />
+<img alt="_images/809925d938b27dba56a52ed2ea1c863e2e8d3af7644f8641e31658638f161d27.png" src="_images/809925d938b27dba56a52ed2ea1c863e2e8d3af7644f8641e31658638f161d27.png" />
+<img alt="_images/952742b9cd1c1ab80f4389ef9c2f45937632192540dfb2b54da03fb3f67d32d3.png" src="_images/952742b9cd1c1ab80f4389ef9c2f45937632192540dfb2b54da03fb3f67d32d3.png" />
 </div>
 </div>
 <p>Note how, for the larger value of <span class="math notranslate nohighlight">\(\epsilon\)</span>, we get a much more dense coupling matrix. This result is as we expected: larger <span class="math notranslate nohighlight">\(\epsilon\)</span> places a larger emphasis on entropy in our cost function. Let’s see what these different coupling matrices mean for our UMAP visualization:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">aligned_y</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">aligned_y_sm</span><span class="p">,</span> <span class="s1">&#39;eps=1e-5&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">aligned_y_med</span><span class="p">,</span> <span class="s1">&#39;eps=1e-3&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">aligned_y_lg</span><span class="p">,</span> <span class="s1">&#39;eps=1e-1&#39;</span><span class="p">)]:</span>    
-    <span class="n">um</span> <span class="o">=</span> <span class="n">umap</span><span class="o">.</span><span class="n">UMAP</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
-
     <span class="n">Xy_um</span><span class="o">=</span><span class="n">um</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X</span><span class="p">,</span> <span class="n">aligned_y</span><span class="o">.</span><span class="n">numpy</span><span class="p">()),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 
     <span class="n">X_um</span><span class="o">=</span><span class="n">Xy_um</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1000</span><span class="p">,]</span>
     <span class="n">y_um</span><span class="o">=</span><span class="n">Xy_um</span><span class="p">[</span><span class="mi">1000</span><span class="p">:,]</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_um</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_um</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ADT&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">y_um</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_um</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Gene Expression&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">y_um</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_um</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Gene Expression&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Colored based on domains, </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">size</span><span class="p">))</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -808,9 +795,9 @@ Total sum of differences: 0.014399499632418156
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/5b273018ba5158baf174215d93ad0e8cc3d6eef9c0710a369b895d13ec6a1382.png" src="_images/5b273018ba5158baf174215d93ad0e8cc3d6eef9c0710a369b895d13ec6a1382.png" />
-<img alt="_images/eda9644304508fb07a78b76e1d5f18a8c69b52a801619841205350b2f21c2822.png" src="_images/eda9644304508fb07a78b76e1d5f18a8c69b52a801619841205350b2f21c2822.png" />
-<img alt="_images/b3950dc5e39839eeb7ece3613daf47bfd914a80c3a19b429f58688b50e8aac11.png" src="_images/b3950dc5e39839eeb7ece3613daf47bfd914a80c3a19b429f58688b50e8aac11.png" />
+<img alt="_images/b6474ab2bfc7c9b06168b8753d7d00656e6577b6f75e2dc854f56bd89e7b8c7a.png" src="_images/b6474ab2bfc7c9b06168b8753d7d00656e6577b6f75e2dc854f56bd89e7b8c7a.png" />
+<img alt="_images/2190f8aa5e3eec9958c39fa3197f3a71f345a93120e3767bce4125bd945faf8a.png" src="_images/2190f8aa5e3eec9958c39fa3197f3a71f345a93120e3767bce4125bd945faf8a.png" />
+<img alt="_images/92508385e8438f2073cf43be4b0e80903065a39f18568c3cf2529587c7e46e50.png" src="_images/92508385e8438f2073cf43be4b0e80903065a39f18568c3cf2529587c7e46e50.png" />
 </div>
 </div>
 <p>In the low <span class="math notranslate nohighlight">\(\epsilon\)</span> case, we see a near 1-1 alignment (remember, this near 1-1 is likely mapping wrong cells to wrong cells in many cases) in UMAP, which is consistent with the sparse coupling matrix. As we raise <span class="math notranslate nohighlight">\(\epsilon\)</span> to the medium case, we start to see some deviation from 1-1 alignment, and in the large <span class="math notranslate nohighlight">\(\epsilon\)</span> case, we see something completely different. To see what is really happening in this large <span class="math notranslate nohighlight">\(\epsilon\)</span> case, let’s try linear dimensionality reduction:</p>
@@ -822,8 +809,8 @@ Total sum of differences: 0.014399499632418156
 <span class="n">y_pca</span><span class="o">=</span><span class="n">Xy_pca</span><span class="p">[</span><span class="mi">1000</span><span class="p">:,]</span>
 
 <span class="c1"># Plot aligned domains, samples colored by domain identity:</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">y_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Gene Expression&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ADT&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ADT&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">y_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Gene Expression&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Colored based on domains&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -831,7 +818,7 @@ Total sum of differences: 0.014399499632418156
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/4c8631026f3a7ce6dbcdd79520e652d5dad751ebd48b022be92fa466370402bb.png" src="_images/4c8631026f3a7ce6dbcdd79520e652d5dad751ebd48b022be92fa466370402bb.png" />
+<img alt="_images/9deb3aa46f7ac6c184c2890c2798b6b765386e6097bebebe68ff861b0f5b07b8.png" src="_images/9deb3aa46f7ac6c184c2890c2798b6b765386e6097bebebe68ff861b0f5b07b8.png" />
 </div>
 </div>
 <p>As we can see, the projected data has little to no variance with respect to the principal components of our anchor domain. We can interpret this to mean that every point in the domain being projected was projected to an average of every point in the anchor domain; since the coupling matrix was so dense, projection just led to a weighted average of points where the weights were much closer to even. So, <span class="math notranslate nohighlight">\(\epsilon\)</span> too high and too low both have their setbacks.</p>
@@ -884,9 +871,9 @@ Total sum of differences: 0.014399499632418156
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fracs</span> <span class="o">=</span> <span class="n">scootr</span><span class="o">.</span><span class="n">calc_domainAveraged_FOSCTTM</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">aligned_y</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average FOSCTTM score for this alignment with X onto Y is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">fracs</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average FOSCTTM score for this alignment with X onto Y is:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">fracs</span><span class="p">))</span>
 <span class="n">legend_label</span><span class="o">=</span><span class="s2">&quot;UGW alignment FOSCTTM </span><span class="se">\n</span><span class="s2"> average value: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">fracs</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fracs</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">fracs</span><span class="p">),</span> <span class="s2">&quot;r--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">legend_label</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fracs</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">fracs</span><span class="p">),</span> <span class="s2">&quot;b--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">legend_label</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Cells&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Sorted FOSCTTM&quot;</span><span class="p">)</span>
@@ -895,24 +882,22 @@ Total sum of differences: 0.014399499632418156
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Average FOSCTTM score for this alignment with X onto Y is:  0.5579354354354354
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Average FOSCTTM score for this alignment with X onto Y is: 0.5579354354354354
 </pre></div>
 </div>
-<img alt="_images/bacd5087218ed0a99e1994735dc63779e60a47c08a0d15d04a7349adb4c1cdaf.png" src="_images/bacd5087218ed0a99e1994735dc63779e60a47c08a0d15d04a7349adb4c1cdaf.png" />
+<img alt="_images/19605ee174f431a501594f8d5a2b838e46e704a83270ef61e19b2bccc2052ba4.png" src="_images/19605ee174f431a501594f8d5a2b838e46e704a83270ef61e19b2bccc2052ba4.png" />
 </div>
 </div>
 <p>And visualizing it:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">um</span> <span class="o">=</span> <span class="n">umap</span><span class="o">.</span><span class="n">UMAP</span><span class="p">()</span>
-
-<span class="n">Xy_um</span><span class="o">=</span><span class="n">um</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X</span><span class="p">,</span> <span class="n">aligned_y</span><span class="o">.</span><span class="n">numpy</span><span class="p">()),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Xy_um</span><span class="o">=</span><span class="n">um</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X</span><span class="p">,</span> <span class="n">aligned_y</span><span class="o">.</span><span class="n">numpy</span><span class="p">()),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 
 <span class="n">X_um</span><span class="o">=</span><span class="n">Xy_um</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1000</span><span class="p">,]</span>
 <span class="n">y_um</span><span class="o">=</span><span class="n">Xy_um</span><span class="p">[</span><span class="mi">1000</span><span class="p">:,]</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_um</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_um</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ADT&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">y_um</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_um</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Gene Expression&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">y_um</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_um</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Gene Expression&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Colored based on domains&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -920,7 +905,7 @@ Total sum of differences: 0.014399499632418156
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/6299f58215c8300f588bf33b0ddadeacc26bcdc80dd3d74d181910503c147c6a.png" src="_images/6299f58215c8300f588bf33b0ddadeacc26bcdc80dd3d74d181910503c147c6a.png" />
+<img alt="_images/2f20c514f53b03117d274f9e4c76d83636435e81d340b4a60fb04ffe5562788d.png" src="_images/2f20c514f53b03117d274f9e4c76d83636435e81d340b4a60fb04ffe5562788d.png" />
 </div>
 </div>
 <p>However, we can only truly get a window into <span class="math notranslate nohighlight">\(\rho\)</span> by looking at the coupling matrix. In the uniform marginal case, which we got with fgw, each row would have the same sum, <span class="math notranslate nohighlight">\(\frac{1}{1000}\)</span>. With our new unbalancing, this is no longer the case:</p>
@@ -929,7 +914,7 @@ Total sum of differences: 0.014399499632418156
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Unbalanced coupling matrix: &#39;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">pi_samp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Balanced coupling matrix: &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Balanced coupling matrix: &#39;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">pi_samp_ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="c1"># a coupling matrix from earlier, that was balanced</span>
 </pre></div>
@@ -947,6 +932,7 @@ tensor(0.0009)
 tensor(0.0010)
 tensor(0.0010)
 tensor(0.0010)
+
 Balanced coupling matrix: 
 tensor(0.0010)
 tensor(0.0010)
@@ -1016,212 +1002,15 @@ Name: count, dtype: int64
 <span class="n">y_lg</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">((</span><span class="n">y_lg</span><span class="p">,</span> <span class="n">in_clust_vec_lg</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">y_new</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">((</span><span class="n">y_lg</span><span class="p">,</span> <span class="n">y_sm</span><span class="p">))</span>
-<span class="n">y_new</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>ITGAL</th>
-      <th>ITGAX</th>
-      <th>IL3RA</th>
-      <th>IL7R</th>
-      <th>CD14</th>
-      <th>FCGR3A</th>
-      <th>KLRB1</th>
-      <th>CD19</th>
-      <th>CCR7</th>
-      <th>IL2RA</th>
-      <th>Cluster</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Cell 949</th>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>Cell 31</th>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>Cell 11</th>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>Cell 806</th>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.303857</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.952718</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>Cell 645</th>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>Cell 422</th>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000638</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000572</td>
-      <td>0.0</td>
-      <td>0.002814</td>
-      <td>0.000000</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>Cell 716</th>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000572</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.005041</td>
-      <td>0.999970</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>Cell 724</th>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.999989</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>Cell 459</th>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.010771</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>Cell 361</th>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-      <td>0.999721</td>
-      <td>False</td>
-    </tr>
-  </tbody>
-</table>
-<p>100 rows × 11 columns</p>
-</div></div></div>
 </div>
 <p>This process has given us a new version of our gene expression domain, which we will align with our original ADT domain. We expect that the top ten rows of the coupling matrix will transport more mass with <span class="math notranslate nohighlight">\(\rho\)</span> &lt; infty. Now, we can try an alignment; however, we first need a distance matrix for our new y:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Dy_knn_new</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">scootr</span><span class="o">.</span><span class="n">knn_dist</span><span class="p">(</span><span class="n">y_new</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/sklearn/base.py:439: UserWarning: X does not have valid feature names, but NearestNeighbors was fitted with feature names
-  warnings.warn(
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="n">Dy_knn_new</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">scootr</span><span class="o">.</span><span class="n">knn_dist</span><span class="p">(</span><span class="n">y_new</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1239,14 +1028,14 @@ Name: count, dtype: int64
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">pi_samp</span> <span class="ow">in</span> <span class="n">pi_samp_u</span><span class="p">,</span> <span class="n">pi_samp_ctrl</span><span class="p">:</span>
-    <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">pi_samp</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;rocket_r&#39;</span><span class="p">)</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">pi_samp</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/e29baa20e8b7291f29f379ff49dac0b4814cdc26a595d8836a7a73614bb70c4f.png" src="_images/e29baa20e8b7291f29f379ff49dac0b4814cdc26a595d8836a7a73614bb70c4f.png" />
-<img alt="_images/dceec5d5fe552c2c2218f189fc60ba8add7fd0e25014f1ba32593feafa89908e.png" src="_images/dceec5d5fe552c2c2218f189fc60ba8add7fd0e25014f1ba32593feafa89908e.png" />
+<img alt="_images/666f21d826dd1d091084cedd85f63cd92009ef5b826d7d9d290a6108c85a8596.png" src="_images/666f21d826dd1d091084cedd85f63cd92009ef5b826d7d9d290a6108c85a8596.png" />
+<img alt="_images/9712cc120cf98698a6a49672f8e2f9d9d12c3f9647bf588cc92cb20850e8fd22.png" src="_images/9712cc120cf98698a6a49672f8e2f9d9d12c3f9647bf588cc92cb20850e8fd22.png" />
 </div>
 </div>
 <p>This visualization is not so easy to grasp; however, if we look at the column-wise sums, we can see exactly how unbalanced it is:</p>
@@ -1305,14 +1094,14 @@ Name: count, dtype: int64
 </div>
 </div>
 </div>
-<p>Didn’t really work – maybe try again with more carefully selected points?</p>
-<p>[in case I get it to work]:</p>
 <p>As we can see above, the first ten columns in the coupling matrix have larger sums than the others, meaning they are transporting more mass – this outcome is what we predicted! We can conclude that <span class="math notranslate nohighlight">\(\rho\)</span> is particularly helpful in cases where we have disproportionate representation of a particular subset (or subsets) of the underlying manifold shared between the two domains.</p>
 </section>
 <section id="conclusion">
 <h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this heading">#</a></h2>
 <p>With an understanding of what <span class="math notranslate nohighlight">\(\rho\)</span> is doing, we still have one parameter left: uot_mode. UOT mode determines how we solve the problem of optimizing the coupling matrix; we have been using Sinkhorn’s algorithm (uot_mode=entropic) throughout this tutorial, but we also give the option to use the Majorization-Minimization algorithm (uot_mode=mm). In SCOOTR, we give additional options, like conditional gradient descent and earth mover’s distance. To read more on this topic, see the end of the UCOOT tutorial, where we do some experiments with this mode, or the SCOOTR tutorial, where we go into other available algorithms.</p>
 <p>Now that we have gone through all of the most important pieces of how to run UGW on your own data, you can move onto our fused formulation or UCOOT tutorial. The fused formulation helps incorporate prior knowledge into the UGW/UCOOT procedures.</p>
+<p>Citations:</p>
+<p>Quang Huy Tran, Hicham Janati, Nicolas Courty, Rémi Flamary, Ievgen Redko, Pinar Demetci and Ritambhara Singh. Unbalanced CO-Optimal Transport. arXiv, <a class="reference external" href="http://stat.ML">stat.ML</a>, 2023.</p>
 </section>
 </section>
 

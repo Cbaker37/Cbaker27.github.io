@@ -15,17 +15,23 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-# an example of epsilon search
-pi_samp_dt = {}
-pi_feat_dt = {}
-for val in np.logspace(start=-6, stop=-1, num=10):
-    # (pi_samp_dt[val], pi_feat_dt[val]), _ = scootr.solver_fcoot(torch.from_numpy(X).to(device), torch.from_numpy(y).to(device), eps=val)
+for pi_feat, pi_samp, size in [(pi_feat_small, pi_samp_small, 'eps=1e-5'), (pi_feat_med, pi_samp_med, 'eps=1e-3'), (pi_feat_lg, pi_samp_lg, 'eps=1e-1')]:
+    
+    _, (ax1, ax2) = plt.subplots(1, 2, figsize(12, 5))
+
+    sns.heatmap(pd.DataFrame(pi_feat, index=X_annotated.columns, columns=y_annotated.columns), ax=ax1, cmap='Blues')
+    sns.heatmap(pi_samp, ax=ax2, cmap='Blues')
+    plt.show()
 ------------------
 
 
-[0;36m  Cell [0;32mIn[16], line 5[0;36m[0m
-[0;31m    # (pi_samp_dt[val], pi_feat_dt[val]), _ = scootr.solver_fcoot(torch.from_numpy(X).to(device), torch.from_numpy(y).to(device), eps=val)[0m
-[0m                                                                                                                                          ^[0m
-[0;31mIndentationError[0m[0;31m:[0m expected an indented block
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mNameError[0m                                 Traceback (most recent call last)
+Cell [0;32mIn[17], line 3[0m
+[1;32m      1[0m [38;5;28;01mfor[39;00m pi_feat, pi_samp, size [38;5;129;01min[39;00m [(pi_feat_small, pi_samp_small, [38;5;124m'[39m[38;5;124meps=1e-5[39m[38;5;124m'[39m), (pi_feat_med, pi_samp_med, [38;5;124m'[39m[38;5;124meps=1e-3[39m[38;5;124m'[39m), (pi_feat_lg, pi_samp_lg, [38;5;124m'[39m[38;5;124meps=1e-1[39m[38;5;124m'[39m)]:
+[0;32m----> 3[0m     _, (ax1, ax2) [38;5;241m=[39m plt[38;5;241m.[39msubplots([38;5;241m1[39m, [38;5;241m2[39m, [43mfigsize[49m([38;5;241m12[39m, [38;5;241m5[39m))
+[1;32m      5[0m     sns[38;5;241m.[39mheatmap(pd[38;5;241m.[39mDataFrame(pi_feat, index[38;5;241m=[39mX_annotated[38;5;241m.[39mcolumns, columns[38;5;241m=[39my_annotated[38;5;241m.[39mcolumns), ax[38;5;241m=[39max1, cmap[38;5;241m=[39m[38;5;124m'[39m[38;5;124mBlues[39m[38;5;124m'[39m)
+[1;32m      6[0m     sns[38;5;241m.[39mheatmap(pi_samp, ax[38;5;241m=[39max2, cmap[38;5;241m=[39m[38;5;124m'[39m[38;5;124mBlues[39m[38;5;124m'[39m)
 
+[0;31mNameError[0m: name 'figsize' is not defined
 

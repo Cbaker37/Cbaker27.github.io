@@ -7,13 +7,6 @@ header-includes:
 
 # The Evolution of SCOOTR
 
-TO DO:
-
-- fix math/notation (something is wrong, after now reading Pinar's latest paper)
-- Confirm Kantorovich
-- Decide whether to use SCOOTR or AGW as main acronym for the alpha*GW + (1-alpha)*COOT
-formulation
-
 We will begin by examining the evolution of optimal transport formulations, and then
 enter into a brief description of our application of these formulations.
 
@@ -161,14 +154,14 @@ $min_{\pi \in \Pi(\mu, \nu)} (\Sigma_{i = 1}^{n_\mu}\Sigma_{j = 1}^{n_\mu}\Sigma
 
 which can also be expressed as the inner product: 
 
-$min_{\pi \in \Pi(\mu, \nu)} (\langle L(D_\mu, D_\nu), \pi \otimes \pi \rangle)$,
+$min_{\pi \in \Pi(\mu, \nu)} (\langle L(D_\mu, D_\nu) \otimes \pi, \pi \rangle)$,
 
 where $\otimes$ is the tensor product.
 
 Just as in OT, adding entropic regularization allows us to use Sinkhorn-like iterations
 when we find the new cost-minimizing $\pi$:
 
-$min_{\pi \in \Pi(\mu, \nu)} (\langle L(D_\mu, D_\nu), \pi \otimes \pi \rangle) - \epsilon \langle \pi, \log \pi \rangle$
+$min_{\pi \in \Pi(\mu, \nu)} (\langle L(D_\mu, D_\nu) \otimes \pi, \pi \rangle) - \epsilon \langle \pi, \log \pi \rangle$
 
 Now, we move onto the unbalanced version of this formulation.
 
