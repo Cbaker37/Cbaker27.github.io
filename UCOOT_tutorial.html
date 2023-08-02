@@ -646,7 +646,7 @@ CUDNN version: None
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/6168d401541bba321f96fa08358fba34f4870c7fd3167c78fb3b4f46f09e0595.png" src="_images/6168d401541bba321f96fa08358fba34f4870c7fd3167c78fb3b4f46f09e0595.png" />
+<img alt="_images/ac5b079a6538f50fd91b6a61d689c5cef051870ce514400dfedf714e5132b42a.png" src="_images/ac5b079a6538f50fd91b6a61d689c5cef051870ce514400dfedf714e5132b42a.png" />
 </div>
 </div>
 </section>
@@ -785,8 +785,8 @@ CUDNN version: None
 <span class="n">y_pca</span><span class="o">=</span><span class="n">Xy_pca</span><span class="p">[</span><span class="mi">1000</span><span class="p">:,]</span>
 
 <span class="c1"># Plot aligned domains, samples colored by domain identity:</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">y_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Gene Expression&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ADT&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ADT&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">y_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Gene Expression&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Colored based on domains&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -794,7 +794,7 @@ CUDNN version: None
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/f7770f30c2a5b57f7ca7dc3d85de128dafbd95ba645b98e135d75c02dec54726.png" src="_images/f7770f30c2a5b57f7ca7dc3d85de128dafbd95ba645b98e135d75c02dec54726.png" />
+<img alt="_images/1828b48e8b8699767fd5efa60d808680444baa788f808e1294f4e88f923d0efe.png" src="_images/1828b48e8b8699767fd5efa60d808680444baa788f808e1294f4e88f923d0efe.png" />
 </div>
 </div>
 <p>We can see that the gene expression data all gets projected near the origin on the PCA graph of the original ADT data – this indicates that the projection is getting closer to a weighted average of all samples in the original ADT domain, applied to each sample in the gene expression domain (low variance in aligned values). This result is exactly what we would expect, given a very dense sample coupling matrix.</p>
