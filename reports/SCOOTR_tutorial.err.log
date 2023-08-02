@@ -15,28 +15,18 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-X_full_annotated = pd.DataFrame(normalize(normalize(X_raw.X, norm='l2', axis=1).transpose(), norm='l2', axis=1))
-X_full_annotated.index, X_full_annotated.columns = samp_labels, x_feat_labels
-y_full_annotated = pd.DataFrame(normalize(y_raw.transpose().X, norm='l2', axis=1))
-y_full_annotated.index, y_full_annotated.columns = samp_labels, y_feat_labels
-
-X_full = X_full_annotated.to_numpy()
-y_full = y_full_annotated.to_numpy()
-
-X_annotated = X_full_annotated.iloc[:,0:10]
-y_annotated = y_full_annotated.iloc[:,0:10]
-
-X = X_annotated.to_numpy()
-y = y_annotated.to_numpy()
+aligned_y_unsup = scootr_sink.get_barycentre(X, pi_samp_unsup)
+aligned_y_medsup = scootr_sink.get_barycentre(X, pi_samp_medsup)
+aligned_y_fullsup = scootr_sink.get_barycentre(X, pi_samp_fullsup)
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mNameError[0m                                 Traceback (most recent call last)
-Cell [0;32mIn[2], line 1[0m
-[0;32m----> 1[0m X_full_annotated [38;5;241m=[39m [43mpd[49m[38;5;241m.[39mDataFrame(normalize(normalize(X_raw[38;5;241m.[39mX, norm[38;5;241m=[39m[38;5;124m'[39m[38;5;124ml2[39m[38;5;124m'[39m, axis[38;5;241m=[39m[38;5;241m1[39m)[38;5;241m.[39mtranspose(), norm[38;5;241m=[39m[38;5;124m'[39m[38;5;124ml2[39m[38;5;124m'[39m, axis[38;5;241m=[39m[38;5;241m1[39m))
-[1;32m      2[0m X_full_annotated[38;5;241m.[39mindex, X_full_annotated[38;5;241m.[39mcolumns [38;5;241m=[39m samp_labels, x_feat_labels
-[1;32m      3[0m y_full_annotated [38;5;241m=[39m pd[38;5;241m.[39mDataFrame(normalize(y_raw[38;5;241m.[39mtranspose()[38;5;241m.[39mX, norm[38;5;241m=[39m[38;5;124m'[39m[38;5;124ml2[39m[38;5;124m'[39m, axis[38;5;241m=[39m[38;5;241m1[39m))
+Cell [0;32mIn[26], line 1[0m
+[0;32m----> 1[0m aligned_y_unsup [38;5;241m=[39m scootr_sink[38;5;241m.[39mget_barycentre(X, [43mpi_samp_unsup[49m)
+[1;32m      2[0m aligned_y_medsup [38;5;241m=[39m scootr_sink[38;5;241m.[39mget_barycentre(X, pi_samp_medsup)
+[1;32m      3[0m aligned_y_fullsup [38;5;241m=[39m scootr_sink[38;5;241m.[39mget_barycentre(X, pi_samp_fullsup)
 
-[0;31mNameError[0m: name 'pd' is not defined
+[0;31mNameError[0m: name 'pi_samp_unsup' is not defined
 
