@@ -507,7 +507,6 @@ CUDNN version: None
 <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;ADT Domain </span><span class="se">\n</span><span class="s2"> Before Alignment&quot;</span><span class="p">)</span>
 <span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">originaly_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">originaly_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Gene Expression Domain </span><span class="se">\n</span><span class="s2"> Before Alignment&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;pre.png&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -653,7 +652,7 @@ CUDNN version: None
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/531c0f8a004a5a49eb01f36b0076f4976ead1c925d47d004ee6e8ad0e53836e5.png" src="_images/531c0f8a004a5a49eb01f36b0076f4976ead1c925d47d004ee6e8ad0e53836e5.png" />
+<img alt="_images/9dd3b0b5af434403aee8a1f510ee63b2837b836cfc288751afa633d9038d2605.png" src="_images/9dd3b0b5af434403aee8a1f510ee63b2837b836cfc288751afa633d9038d2605.png" />
 </div>
 </div>
 <p>Note that the alignments look nice (the shapes match up well). This property does not guarantee a good alignment, as we can see by our high original FOSCTTM score. In fact, it is more a representation of the sparsity of the coupling matrix – if the coupling matrix is very sparse, it will get close to attempting a 1-1 matching, which could be wrong (even though it is 1-1). Having a coupling matrix that is too sparse can be quite dangerous in cases where there is no underlying 1-1 sample map.</p>
@@ -818,7 +817,7 @@ Total sum of differences: 0.014399499632418156
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/9deb3aa46f7ac6c184c2890c2798b6b765386e6097bebebe68ff861b0f5b07b8.png" src="_images/9deb3aa46f7ac6c184c2890c2798b6b765386e6097bebebe68ff861b0f5b07b8.png" />
+<img alt="_images/08615328cea68e1bf96ecb726b25b06a4d0bde399a653980c333b3fa82b3187b.png" src="_images/08615328cea68e1bf96ecb726b25b06a4d0bde399a653980c333b3fa82b3187b.png" />
 </div>
 </div>
 <p>As we can see, the projected data has little to no variance with respect to the principal components of our anchor domain. We can interpret this to mean that every point in the domain being projected was projected to an average of every point in the anchor domain; since the coupling matrix was so dense, projection just led to a weighted average of points where the weights were much closer to even. So, <span class="math notranslate nohighlight">\(\epsilon\)</span> too high and too low both have their setbacks.</p>
