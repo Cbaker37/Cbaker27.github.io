@@ -433,7 +433,7 @@ Therefore, the problem this basic OT formulation faces is:</p>
 <p>Clearly, this problem requires us to find <span class="math notranslate nohighlight">\(n_{\mu}*n_{\nu}\)</span> unknowns, which will quickly
 lead to a computationally infeasible optimization as we scale. In order to remedy this issue,
 we add an entropic regularization term to the objective function:</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\langle C, \pi \rangle - \epsilon \langle \pi, \log \pi \rangle)\)</span></p>
+<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\langle C, \pi \rangle + \epsilon \langle \pi, \log \pi \rangle)\)</span></p>
 <p>Note that <span class="math notranslate nohighlight">\(H(\pi) = \langle \pi, \log \pi \rangle\)</span> is a measure of entropy of <span class="math notranslate nohighlight">\(\pi\)</span>; so,
 the higher the entropy, the lower the cost. As a result, as <span class="math notranslate nohighlight">\(\epsilon\)</span> grows, the optimal <span class="math notranslate nohighlight">\(\pi\)</span>
 gets more dense (favoring entropy even more), whereas if <span class="math notranslate nohighlight">\(\epsilon\)</span> falls, we approach our original
@@ -494,7 +494,7 @@ much each mine produces or each factory processes, we might add in <span class="
 functions from here will have a balanced and an unbalanced variant; the latter will
 always have the addition of these marginal relaxation terms.</p>
 <p>Our final optimization problem for UOT is:</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi} (\langle C, \pi \rangle - \epsilon \langle \pi, \log \pi \rangle) + \rho_x KL(\pi 𝟙_{n_\nu}, \mu) + \rho_y KL(\pi^{T}𝟙_{n_\mu}, \nu)\)</span></p>
+<p><span class="math notranslate nohighlight">\(min_{\pi} (\langle C, \pi \rangle + \epsilon \langle \pi, \log \pi \rangle) + \rho_x KL(\pi 𝟙_{n_\nu}, \mu) + \rho_y KL(\pi^{T}𝟙_{n_\mu}, \nu)\)</span></p>
 </section>
 <section id="gromov-wasserstein-optimal-transport-gw">
 <h3>Gromov-Wasserstein Optimal Transport (GW)<a class="headerlink" href="#gromov-wasserstein-optimal-transport-gw" title="Permalink to this heading">#</a></h3>
@@ -524,14 +524,14 @@ function and minimization problem for GW:</p>
 <p>where <span class="math notranslate nohighlight">\(\otimes\)</span> is the tensor product.</p>
 <p>Just as in OT, adding entropic regularization allows us to use Sinkhorn-like iterations
 when we find the new cost-minimizing <span class="math notranslate nohighlight">\(\pi\)</span>:</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\langle L(D_\mu, D_\nu) \otimes \pi, \pi \rangle) - \epsilon \langle \pi, \log \pi \rangle\)</span></p>
+<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\langle L(D_\mu, D_\nu) \otimes \pi, \pi \rangle) + \epsilon \langle \pi, \log \pi \rangle\)</span></p>
 <p>Now, we move onto the unbalanced version of this formulation.</p>
 </section>
 <section id="unbalanced-gromov-wasserstein-optimal-transport-ugw">
 <h3>Unbalanced Gromov-Wasserstein Optimal Transport (UGW)<a class="headerlink" href="#unbalanced-gromov-wasserstein-optimal-transport-ugw" title="Permalink to this heading">#</a></h3>
 <p>Just as with the transition from OT to UOT, we relax the <span class="math notranslate nohighlight">\(\pi \in \Pi\)</span> marginal constraint
 using <span class="math notranslate nohighlight">\(\rho_x\)</span> and <span class="math notranslate nohighlight">\(\rho_y\)</span>:</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi} (\langle L(D_\mu, D_\nu) \otimes \pi, \pi \rangle) - \epsilon \langle \pi, 
+<p><span class="math notranslate nohighlight">\(min_{\pi} (\langle L(D_\mu, D_\nu) \otimes \pi, \pi \rangle) + \epsilon \langle \pi, 
 \log \pi \rangle + \rho_x KL(\pi𝟙_{n_\nu}, \mu) + \rho_y KL(\pi^{T}𝟙_{n_\mu}, \nu)\)</span></p>
 <p>As with UOT, the <span class="math notranslate nohighlight">\(\rho\)</span> parameters allow outcomes of either mesaure to transport
 more or less mass than they originally would have given <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\nu\)</span>. This time,
@@ -591,9 +591,9 @@ information on the relative positioning of i and k to their corresponding f-supe
 measures and the relative positioning of j and l to their corresponding s-superscripted
 measures. From here, we can reframe this function as a minimization problem and add
 entropic regularization (allowing for Sinkhorn iterations):</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi_s \in \Pi(\mu^s, \nu^s), \pi_f \in \Pi(\mu^f, \nu^f)} (\langle L(A, B) \otimes \pi_f, \pi_s \rangle) - \epsilon_s \langle \pi_s, \log \pi_s \rangle - \epsilon_f \langle \pi_f, \log \pi_f \rangle\)</span></p>
+<p><span class="math notranslate nohighlight">\(min_{\pi_s \in \Pi(\mu^s, \nu^s), \pi_f \in \Pi(\mu^f, \nu^f)} (\langle L(A, B) \otimes \pi_f, \pi_s \rangle) + \epsilon_s \langle \pi_s, \log \pi_s \rangle + \epsilon_f \langle \pi_f, \log \pi_f \rangle\)</span></p>
 <p>We can also do joint entropic regularization, which is equivalent to the <span class="math notranslate nohighlight">\(\epsilon_s = \epsilon_f\)</span> case:</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi_s \in \Pi(\mu^s, \nu^s), \pi_f \in \Pi(\mu^f, \nu^f)} (\langle L(A, B) \otimes \pi_f, \pi_s \rangle) - \epsilon \langle \pi_s \otimes \pi_f, \log (\pi_s \otimes \pi_f) \rangle\)</span></p>
+<p><span class="math notranslate nohighlight">\(min_{\pi_s \in \Pi(\mu^s, \nu^s), \pi_f \in \Pi(\mu^f, \nu^f)} (\langle L(A, B) \otimes \pi_f, \pi_s \rangle) + \epsilon \langle \pi_s \otimes \pi_f, \log (\pi_s \otimes \pi_f) \rangle\)</span></p>
 <p>Note that, in the case of our work, we gerenally use euclidean distance (l2)
 for L. Now, we can move on to how we solve this new transport problem; clearly,
 we will now need more than Sinkhorn iterations.</p>
@@ -606,7 +606,7 @@ called “block coordinate descent,” or BCD. Without getting too into the deta
 is doing.</p>
 <p>Consider the cost function we derived for standard COOT above and suppose we hold
 <span class="math notranslate nohighlight">\(\pi_f\)</span> constant. If we do so, we uncover a new minimization problem of the form (CHECK THIS, CITE):</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi_s \in \Pi(\mu^s, \nu^s)} (\langle L_c(A, B, \pi_f), \pi_s \rangle) - \epsilon \langle \pi_s, 
+<p><span class="math notranslate nohighlight">\(min_{\pi_s \in \Pi(\mu^s, \nu^s)} (\langle L_c(A, B, \pi_f), \pi_s \rangle) + \epsilon \langle \pi_s, 
 \log \pi_s \rangle\)</span></p>
 <p>Where L is a function of <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(B\)</span>, and <span class="math notranslate nohighlight">\(\pi_f\)</span> outside the scope of this document.
 With this new minimization problem, we have an opportunity to optimize <span class="math notranslate nohighlight">\(\pi_s\)</span>
@@ -628,7 +628,7 @@ of iteration, each of which must be considered when selecting optimization param
 <h3>Unbalanced Co-Optimal Transport (UCOOT)<a class="headerlink" href="#unbalanced-co-optimal-transport-ucoot" title="Permalink to this heading">#</a></h3>
 <p>No surprises here – we will now unbalance COOT using four marginal relaxation
 parameters: <span class="math notranslate nohighlight">\(\rho^s_x, \rho^s_y, \rho^f_x, \rho^f_y\)</span>:</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi_s, \pi_f} (\langle L(A, B) \otimes \pi_f, \pi_s \rangle) - \epsilon \langle \pi_s \otimes \pi_f, \log (\pi_s \otimes \pi_f) \rangle + \rho^s_x KL(\pi_s 𝟙_{n_{\nu^s}}, \mu^s)\)</span></p>
+<p><span class="math notranslate nohighlight">\(min_{\pi_s, \pi_f} (\langle L(A, B) \otimes \pi_f, \pi_s \rangle) + \epsilon \langle \pi_s \otimes \pi_f, \log (\pi_s \otimes \pi_f) \rangle + \rho^s_x KL(\pi_s 𝟙_{n_{\nu^s}}, \mu^s)\)</span></p>
 <p><span class="math notranslate nohighlight">\(+ \rho^s_y KL(\pi_s^{T}𝟙_{n_{\mu^s}}, \nu^s) + \rho^f_x KL(\pi_f 𝟙_{{n_\nu^f}}, \mu^f) + \rho^f_y KL(\pi_f^{T}𝟙_{n_{\mu^f}}, \nu^f)\)</span></p>
 <p>These parameters each allow outcomes in any of our four measures to transport more or less mass
 than originally allocated, provided <span class="math notranslate nohighlight">\(\rho &lt;\)</span> infinity. As all four <span class="math notranslate nohighlight">\(\rho\)</span> approach infinity,
@@ -636,10 +636,10 @@ we recover COOT. We tend to relax the marginals of our transport plans with <spa
 when there is some disproportionality among outcomes of any of the measures that we wish to
 correct. Note that we have now introduced a large number of new hyperparameters. These
 marginal relaxation terms can be joined for less complexity, either by transport:</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi_s, \pi_f} (\langle L(A, B) \otimes \pi_f, \pi_s \rangle) - \epsilon \langle \pi_s \otimes \pi_f, \log (\pi_s \otimes \pi_f) \rangle + \rho^s KL(\pi_s 𝟙_{n_{\nu^s}} \otimes \pi_s^{T}𝟙_{n_{\mu^s}}, \mu^s \otimes \nu^s)\)</span></p>
+<p><span class="math notranslate nohighlight">\(min_{\pi_s, \pi_f} (\langle L(A, B) \otimes \pi_f, \pi_s \rangle) + \epsilon \langle \pi_s \otimes \pi_f, \log (\pi_s \otimes \pi_f) \rangle + \rho^s KL(\pi_s 𝟙_{n_{\nu^s}} \otimes \pi_s^{T}𝟙_{n_{\mu^s}}, \mu^s \otimes \nu^s)\)</span></p>
 <p><span class="math notranslate nohighlight">\(+ \rho^f KL(\pi_f 𝟙_{n_{\nu^f}} \otimes \pi_f^{T}𝟙_{n_{\mu^f}}, \mu^f \otimes \nu^f)\)</span></p>
 <p>or by domain:</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi_s, \pi_f} (\langle L(A, B) \otimes \pi_f, \pi_s \rangle) - \epsilon \langle \pi_s \otimes \pi_f, \log (\pi_s \otimes \pi_f) \rangle + \rho_x KL(\pi_s 𝟙_{n_{\nu^s}} \otimes \pi_f 𝟙_{n_{\nu^f}}, \mu^s \otimes \mu^f)\)</span></p>
+<p><span class="math notranslate nohighlight">\(min_{\pi_s, \pi_f} (\langle L(A, B) \otimes \pi_f, \pi_s \rangle) + \epsilon \langle \pi_s \otimes \pi_f, \log (\pi_s \otimes \pi_f) \rangle + \rho_x KL(\pi_s 𝟙_{n_{\nu^s}} \otimes \pi_f 𝟙_{n_{\nu^f}}, \mu^s \otimes \mu^f)\)</span></p>
 <p><span class="math notranslate nohighlight">\(+ \rho_y KL(\pi_s^{T}𝟙_{n_{\mu^s}} \otimes \pi_f^{T}𝟙_{n_{\mu^f}}, \nu^s \otimes \nu^f)\)</span></p>
 <p>Transport marginal relaxation ties together the relaxation of the pairs of measures
 that transport mass back and forth (are tied by a transport plan), whereas domain
@@ -660,7 +660,7 @@ seeks to find the dual mapping of UCOOT with the potential for nonlinear relatio
 of UGW. In effect, AGW pushes together the cost functions of UCOOT and UGW, and
 assigns a hyperparameter <span class="math notranslate nohighlight">\(\alpha\)</span> that determines the relative usage of each cost function.
 As a result, we have the following minimization problem:</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi_s, \pi_f} \alpha(\langle L(A, B) \otimes \pi_f, \pi_s \rangle) + (1 - \alpha) (\langle L(D_{\mu_s}, D_{\nu_s}), \pi_s \otimes \pi_s \rangle) - \epsilon \langle \pi_s \otimes \pi_f, \log (\pi_s \otimes \pi_f) \rangle\)</span></p>
+<p><span class="math notranslate nohighlight">\(min_{\pi_s, \pi_f} \alpha(\langle L(A, B) \otimes \pi_f, \pi_s \rangle) + (1 - \alpha) (\langle L(D_{\mu_s}, D_{\nu_s}), \pi_s \otimes \pi_s \rangle) + \epsilon \langle \pi_s \otimes \pi_f, \log (\pi_s \otimes \pi_f) \rangle\)</span></p>
 <p><span class="math notranslate nohighlight">\( + \rho_x KL(\pi_s 𝟙_{n_{\nu^s}} \otimes \pi_f 𝟙_{n_{\nu^f}}, \mu^s \otimes \mu^f) + \rho_y KL(\pi_s^{T}𝟙_{n_{\mu^s}} \otimes \pi_f^{T}𝟙_{n_{\mu^f}}, \nu^s \otimes \nu^f)\)</span></p>
 <p>While less theoretical than the previous formulations we have looked at, AGW
 allows for an improvement on UCOOT by allowing for the recovery of nonlinear
