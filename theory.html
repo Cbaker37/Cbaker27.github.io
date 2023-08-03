@@ -426,14 +426,14 @@ matrix, <span class="math notranslate nohighlight">\(\pi\)</span>, supported on 
 this formulation of optimal transport, we know it will be in the set
 <span class="math notranslate nohighlight">\(\Pi(\mu, \nu) = \{\pi | \pi 𝟙_{n_{\nu}} = \mu, \pi^{T}𝟙_{n_{\mu}} = \nu\}\)</span>.
 Therefore, the problem this basic OT formulation faces is:</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\Sigma_{i = 1}^{n_\mu}\Sigma_{j = 1}^{n_\nu} (C(x_i, y_j)\pi(x_i, y_j)))\)</span></p>
+<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\Sigma_{i = 1}^{n_\mu}\Sigma_{j = 1}^{n_\nu} (C(x_i, y_j)\pi_{ij}))\)</span></p>
 <p>or</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\langle \pi, C \rangle)\)</span>. Sometimes, we also refer to
+<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\langle C, \pi \rangle)\)</span>. Sometimes, we also refer to
 <span class="math notranslate nohighlight">\(\pi\)</span> as <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
 <p>Clearly, this problem requires us to find <span class="math notranslate nohighlight">\(n_{\mu}*n_{\nu}\)</span> unknowns, which will quickly
 lead to a computationally infeasible optimization as we scale. In order to remedy this issue,
 we add an entropic regularization term to the objective function:</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\langle \pi, C \rangle - \epsilon \langle \pi, \log \pi \rangle)\)</span></p>
+<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\langle C, \pi \rangle - \epsilon \langle \pi, \log \pi \rangle)\)</span></p>
 <p>Note that <span class="math notranslate nohighlight">\(H(\pi) = \langle \pi, \log \pi \rangle\)</span> is a measure of entropy of <span class="math notranslate nohighlight">\(\pi\)</span>; so,
 the higher the entropy, the lower the cost. As a result, as <span class="math notranslate nohighlight">\(\epsilon\)</span> grows, the optimal <span class="math notranslate nohighlight">\(\pi\)</span>
 gets more dense (favoring entropy even more), whereas if <span class="math notranslate nohighlight">\(\epsilon\)</span> falls, we approach our original
@@ -494,7 +494,7 @@ much each mine produces or each factory processes, we might add in <span class="
 functions from here will have a balanced and an unbalanced variant; the latter will
 always have the addition of these marginal relaxation terms.</p>
 <p>Our final optimization problem for UOT is:</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi} (\langle \pi, C \rangle - \epsilon \langle \pi, \log \pi \rangle) + \rho_x KL(\pi 𝟙_{n_\nu}, \mu) + \rho_y KL(\pi^{T}𝟙_{n_\mu}, \nu)\)</span></p>
+<p><span class="math notranslate nohighlight">\(min_{\pi} (\langle C, \pi \rangle - \epsilon \langle \pi, \log \pi \rangle) + \rho_x KL(\pi 𝟙_{n_\nu}, \mu) + \rho_y KL(\pi^{T}𝟙_{n_\mu}, \nu)\)</span></p>
 </section>
 <section id="gromov-wasserstein-optimal-transport-gw">
 <h3>Gromov-Wasserstein Optimal Transport (GW)<a class="headerlink" href="#gromov-wasserstein-optimal-transport-gw" title="Permalink to this heading">#</a></h3>
@@ -518,7 +518,7 @@ Optimal Transport”, hence the abbreviation GW.</p>
 fourth order tensor L, which decides the distance between two intra-domain
 pairwise distances, <span class="math notranslate nohighlight">\(D_{\mu_{ij}}\)</span> and <span class="math notranslate nohighlight">\(D_{\nu_{kl}}\)</span>. L leads use to a new objective
 function and minimization problem for GW:</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\Sigma_{i = 1}^{n_\mu}\Sigma_{j = 1}^{n_\mu}\Sigma_{k = 1}^{n_\nu}\Sigma_{l = 1}^{n_\nu} (L(D_{\mu_{ij}}, D_{\nu_{kl}})\pi(x_i, y_k)\pi(x_j, y_l)))\)</span></p>
+<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\Sigma_{i = 1}^{n_\mu}\Sigma_{j = 1}^{n_\mu}\Sigma_{k = 1}^{n_\nu}\Sigma_{l = 1}^{n_\nu} (L(D_{\mu_{ij}}, D_{\nu_{kl}})\pi_{ik}\pi_{jl}))\)</span></p>
 <p>which can also be expressed as the inner product:</p>
 <p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\langle L(D_\mu, D_\nu) \otimes \pi, \pi \rangle)\)</span>,</p>
 <p>where <span class="math notranslate nohighlight">\(\otimes\)</span> is the tensor product.</p>
@@ -557,8 +557,8 @@ information on two different sets of outcomes. We define new probability measure
 <span class="math notranslate nohighlight">\(\mu^s\)</span>, <span class="math notranslate nohighlight">\(\mu^f\)</span>, <span class="math notranslate nohighlight">\(\nu^s\)</span>, <span class="math notranslate nohighlight">\(\nu^f\)</span>. Our new goal is to find a way to transport
 mass from <span class="math notranslate nohighlight">\(\mu^s\)</span> to <span class="math notranslate nohighlight">\(\nu^s\)</span> and <span class="math notranslate nohighlight">\(\mu^f\)</span> to <span class="math notranslate nohighlight">\(\nu^f\)</span> with the least joint cost;
 in other words, we have information on the relationship between <span class="math notranslate nohighlight">\(\mu^s\)</span> and <span class="math notranslate nohighlight">\(\mu^f\)</span>
-(<span class="math notranslate nohighlight">\(A\)</span>) as well as <span class="math notranslate nohighlight">\(\nu^s\)</span> and <span class="math notranslate nohighlight">\(\nu^f\)</span> (<span class="math notranslate nohighlight">\(B\)</span>) to inform our two transport plans, <span class="math notranslate nohighlight">\(\pi^s\)</span> and
-<span class="math notranslate nohighlight">\(\pi^f\)</span>.</p>
+(<span class="math notranslate nohighlight">\(A\)</span>) as well as <span class="math notranslate nohighlight">\(\nu^s\)</span> and <span class="math notranslate nohighlight">\(\nu^f\)</span> (<span class="math notranslate nohighlight">\(B\)</span>) to inform our two transport plans, <span class="math notranslate nohighlight">\(\pi_s\)</span> and
+<span class="math notranslate nohighlight">\(\pi_f\)</span>.</p>
 <p>In order to leverage this information we have between measures across
 these separate transport problems, we use a concept similar to GW. For each <span class="math notranslate nohighlight">\(x_s\)</span>
 in the space of outcomes of <span class="math notranslate nohighlight">\(\mu^s\)</span>, we determine how much mass to transport to
@@ -577,16 +577,16 @@ determination of <span class="math notranslate nohighlight">\(\pi_s\)</span> and
 on accurate correspondence information from the other matrix. Thus, we call
 the procedure of finding <span class="math notranslate nohighlight">\(\pi_s\)</span> and <span class="math notranslate nohighlight">\(\pi_f\)</span> “co-optimal transport” (COOT).</p>
 <p>Now, let’s build the objective function for COOT from what we know about its
-similarity to GW. In the GW case, we have <span class="math notranslate nohighlight">\(\mu_s = \mu_f\)</span> and <span class="math notranslate nohighlight">\(\nu_s = \nu_f\)</span>,
+similarity to GW. In the GW case, we have <span class="math notranslate nohighlight">\(\mu^s = \mu^f\)</span> and <span class="math notranslate nohighlight">\(\nu^s = \nu^f\)</span>,
 if we treat <span class="math notranslate nohighlight">\(A = D_\mu\)</span> and <span class="math notranslate nohighlight">\(B = D_\nu\)</span>. The distance matrices mimic having
 information on the relationships between two pairs of measures. As a result,
 in the GW case (formulated in terms of COOT), we would have <span class="math notranslate nohighlight">\(\pi_s = \pi_f\)</span>.
 Generalizing this reformulation of GW, we get</p>
 <p><span class="math notranslate nohighlight">\((\langle L(A, B) \otimes \pi_f, \pi_s \rangle)\)</span></p>
 <p>as a new objective function. In order to get a closer look, let’s expand this:</p>
-<p><span class="math notranslate nohighlight">\((\Sigma_{i = 1}^{n_{\mu^s}}\Sigma_{j = 1}^{n_{\mu^f}}\Sigma_{k = 1}^{n_{\nu^s}}\Sigma_{l = 1}^{n_{\nu^f}} (L(A_{ij}, B_{kl})\pi^s(i,j)\pi^f(j,l)))\)</span></p>
+<p><span class="math notranslate nohighlight">\((\Sigma_{i = 1}^{n_{\mu^s}}\Sigma_{j = 1}^{n_{\mu^f}}\Sigma_{k = 1}^{n_{\nu^s}}\Sigma_{l = 1}^{n_{\nu^f}} (L(A_{ij}, B_{kl})\pi_{s_{ij}}\pi_{f_{j,l}}))\)</span></p>
 <p>This new objective function describes the exact interdependence we realized earlier
-in this section – we simultaneously optimize <span class="math notranslate nohighlight">\(\pi^s\)</span> and <span class="math notranslate nohighlight">\(\pi^f\)</span>, relying on joint
+in this section – we simultaneously optimize <span class="math notranslate nohighlight">\(\pi_s\)</span> and <span class="math notranslate nohighlight">\(\pi_f\)</span>, relying on joint
 information on the relative positioning of i and k to their corresponding f-superscripted
 measures and the relative positioning of j and l to their corresponding s-superscripted
 measures. From here, we can reframe this function as a minimization problem and add
@@ -680,7 +680,7 @@ might be useful.</p>
 and another set of samples of a given dataset <span class="math notranslate nohighlight">\(B \in \mathbb{R}^2\)</span> as another probability measure.
 Suppose we call each row in <span class="math notranslate nohighlight">\(A\)</span> <span class="math notranslate nohighlight">\(a_i\)</span>, and each row in <span class="math notranslate nohighlight">\(B\)</span> <span class="math notranslate nohighlight">\(b_i\)</span>, for all i respective rows (<span class="math notranslate nohighlight">\(n_A\)</span> and <span class="math notranslate nohighlight">\(n_B\)</span>) in each matrix.
 By applying the OT/UOT framework to this problem, we would be trying to minimize:</p>
-<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\Sigma_{i = 1}^{n_A}\Sigma_{j = 1}^{n_B} (C(a_i, b_j)\pi(a_i, b_j)))\)</span></p>
+<p><span class="math notranslate nohighlight">\(min_{\pi \in \Pi(\mu, \nu)} (\Sigma_{i = 1}^{n_A}\Sigma_{j = 1}^{n_B} (C(a_i, b_j)\pi_{ij}))\)</span></p>
 <p>If we allowed C to be some measure of distance between these two vectors, like
 the dot product, we would recover a transport plan that matches rows by their
 explicit similarity (i.e. <span class="math notranslate nohighlight">\(C(v, v) = 0\)</span> for vector <span class="math notranslate nohighlight">\(v\)</span>). In terms of matching samples,

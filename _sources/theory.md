@@ -38,18 +38,18 @@ this formulation of optimal transport, we know it will be in the set
 $\Pi(\mu, \nu) = \{\pi | \pi 𝟙_{n_{\nu}} = \mu, \pi^{T}𝟙_{n_{\mu}} = \nu\}$.
 Therefore, the problem this basic OT formulation faces is:
 
-$min_{\pi \in \Pi(\mu, \nu)} (\Sigma_{i = 1}^{n_\mu}\Sigma_{j = 1}^{n_\nu} (C(x_i, y_j)\pi(x_i, y_j)))$
+$min_{\pi \in \Pi(\mu, \nu)} (\Sigma_{i = 1}^{n_\mu}\Sigma_{j = 1}^{n_\nu} (C(x_i, y_j)\pi_{ij}))$
 
 or 
 
-$min_{\pi \in \Pi(\mu, \nu)} (\langle \pi, C \rangle)$. Sometimes, we also refer to
+$min_{\pi \in \Pi(\mu, \nu)} (\langle C, \pi \rangle)$. Sometimes, we also refer to
 $\pi$ as $\Gamma$.
 
 Clearly, this problem requires us to find $n_{\mu}*n_{\nu}$ unknowns, which will quickly
 lead to a computationally infeasible optimization as we scale. In order to remedy this issue,
 we add an entropic regularization term to the objective function:
 
-$min_{\pi \in \Pi(\mu, \nu)} (\langle \pi, C \rangle - \epsilon \langle \pi, \log \pi \rangle)$
+$min_{\pi \in \Pi(\mu, \nu)} (\langle C, \pi \rangle - \epsilon \langle \pi, \log \pi \rangle)$
 
 Note that $H(\pi) = \langle \pi, \log \pi \rangle$ is a measure of entropy of $\pi$; so,
 the higher the entropy, the lower the cost. As a result, as $\epsilon$ grows, the optimal $\pi$
@@ -123,7 +123,7 @@ always have the addition of these marginal relaxation terms.
 
 Our final optimization problem for UOT is:
 
-$min_{\pi} (\langle \pi, C \rangle - \epsilon \langle \pi, \log \pi \rangle) + \rho_x KL(\pi 𝟙_{n_\nu}, \mu) + \rho_y KL(\pi^{T}𝟙_{n_\mu}, \nu)$
+$min_{\pi} (\langle C, \pi \rangle - \epsilon \langle \pi, \log \pi \rangle) + \rho_x KL(\pi 𝟙_{n_\nu}, \mu) + \rho_y KL(\pi^{T}𝟙_{n_\mu}, \nu)$
 
 ### Gromov-Wasserstein Optimal Transport (GW)
 
@@ -150,7 +150,7 @@ fourth order tensor L, which decides the distance between two intra-domain
 pairwise distances, $D_{\mu_{ij}}$ and $D_{\nu_{kl}}$. L leads use to a new objective 
 function and minimization problem for GW:
 
-$min_{\pi \in \Pi(\mu, \nu)} (\Sigma_{i = 1}^{n_\mu}\Sigma_{j = 1}^{n_\mu}\Sigma_{k = 1}^{n_\nu}\Sigma_{l = 1}^{n_\nu} (L(D_{\mu_{ij}}, D_{\nu_{kl}})\pi(x_i, y_k)\pi(x_j, y_l)))$
+$min_{\pi \in \Pi(\mu, \nu)} (\Sigma_{i = 1}^{n_\mu}\Sigma_{j = 1}^{n_\mu}\Sigma_{k = 1}^{n_\nu}\Sigma_{l = 1}^{n_\nu} (L(D_{\mu_{ij}}, D_{\nu_{kl}})\pi_{ik}\pi_{jl}))$
 
 which can also be expressed as the inner product: 
 
@@ -200,8 +200,8 @@ information on two different sets of outcomes. We define new probability measure
 $\mu^s$, $\mu^f$, $\nu^s$, $\nu^f$. Our new goal is to find a way to transport
 mass from $\mu^s$ to $\nu^s$ and $\mu^f$ to $\nu^f$ with the least joint cost;
 in other words, we have information on the relationship between $\mu^s$ and $\mu^f$
-($A$) as well as $\nu^s$ and $\nu^f$ ($B$) to inform our two transport plans, $\pi^s$ and
-$\pi^f$. 
+($A$) as well as $\nu^s$ and $\nu^f$ ($B$) to inform our two transport plans, $\pi_s$ and
+$\pi_f$. 
 
 In order to leverage this information we have between measures across
 these separate transport problems, we use a concept similar to GW. For each $x_s$
@@ -223,7 +223,7 @@ on accurate correspondence information from the other matrix. Thus, we call
 the procedure of finding $\pi_s$ and $\pi_f$ "co-optimal transport" (COOT).
 
 Now, let's build the objective function for COOT from what we know about its
-similarity to GW. In the GW case, we have $\mu_s = \mu_f$ and $\nu_s = \nu_f$,
+similarity to GW. In the GW case, we have $\mu^s = \mu^f$ and $\nu^s = \nu^f$,
 if we treat $A = D_\mu$ and $B = D_\nu$. The distance matrices mimic having
 information on the relationships between two pairs of measures. As a result,
 in the GW case (formulated in terms of COOT), we would have $\pi_s = \pi_f$.
@@ -233,10 +233,10 @@ $(\langle L(A, B) \otimes \pi_f, \pi_s \rangle)$
 
 as a new objective function. In order to get a closer look, let's expand this:
 
-$(\Sigma_{i = 1}^{n_{\mu^s}}\Sigma_{j = 1}^{n_{\mu^f}}\Sigma_{k = 1}^{n_{\nu^s}}\Sigma_{l = 1}^{n_{\nu^f}} (L(A_{ij}, B_{kl})\pi^s(i,j)\pi^f(j,l)))$
+$(\Sigma_{i = 1}^{n_{\mu^s}}\Sigma_{j = 1}^{n_{\mu^f}}\Sigma_{k = 1}^{n_{\nu^s}}\Sigma_{l = 1}^{n_{\nu^f}} (L(A_{ij}, B_{kl})\pi_{s_{ij}}\pi_{f_{j,l}}))$
 
 This new objective function describes the exact interdependence we realized earlier
-in this section – we simultaneously optimize $\pi^s$ and $\pi^f$, relying on joint
+in this section – we simultaneously optimize $\pi_s$ and $\pi_f$, relying on joint
 information on the relative positioning of i and k to their corresponding f-superscripted
 measures and the relative positioning of j and l to their corresponding s-superscripted
 measures. From here, we can reframe this function as a minimization problem and add
@@ -351,7 +351,7 @@ and another set of samples of a given dataset $B \in \mathbb{R}^2$ as another pr
 Suppose we call each row in $A$ $a_i$, and each row in $B$ $b_i$, for all i respective rows ($n_A$ and $n_B$) in each matrix.
 By applying the OT/UOT framework to this problem, we would be trying to minimize:
 
-$min_{\pi \in \Pi(\mu, \nu)} (\Sigma_{i = 1}^{n_A}\Sigma_{j = 1}^{n_B} (C(a_i, b_j)\pi(a_i, b_j)))$
+$min_{\pi \in \Pi(\mu, \nu)} (\Sigma_{i = 1}^{n_A}\Sigma_{j = 1}^{n_B} (C(a_i, b_j)\pi_{ij}))$
 
 If we allowed C to be some measure of distance between these two vectors, like
 the dot product, we would recover a transport plan that matches rows by their

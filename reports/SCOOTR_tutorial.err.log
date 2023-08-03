@@ -1,4 +1,15 @@
 Traceback (most recent call last):
+  File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/nbclient/client.py", line 778, in _async_poll_for_reply
+    msg = await ensure_async(self.kc.shell_channel.get_msg(timeout=new_timeout))
+  File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/jupyter_core/utils/__init__.py", line 182, in ensure_async
+    result = await obj
+  File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/jupyter_client/channels.py", line 315, in get_msg
+    raise Empty
+_queue.Empty
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
   File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
     executenb(
   File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/nbclient/client.py", line 1305, in execute
@@ -9,24 +20,21 @@ Traceback (most recent call last):
     return future.result()
   File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/nbclient/client.py", line 705, in async_execute
     await self.async_execute_cell(
-  File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/nbclient/client.py", line 1058, in async_execute_cell
-    await self._check_raise_for_error(cell, cell_index, exec_reply)
-  File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
-    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
-nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
-------------------
-aligned_y_unsup = scootr_sink.get_barycentre(X, pi_samp_unsup)
-aligned_y_medsup = scootr_sink.get_barycentre(X, pi_samp_medsup)
-aligned_y_fullsup = scootr_sink.get_barycentre(X, pi_samp_fullsup)
-------------------
+  File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/nbclient/client.py", line 1001, in async_execute_cell
+    exec_reply = await self.task_poll_for_reply
+  File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/nbclient/client.py", line 802, in _async_poll_for_reply
+    error_on_timeout_execute_reply = await self._async_handle_timeout(timeout, cell)
+  File "/Users/colinbaker/anaconda3/envs/scootr/lib/python3.9/site-packages/nbclient/client.py", line 852, in _async_handle_timeout
+    raise CellTimeoutError.error_from_timeout_and_cell(
+nbclient.exceptions.CellTimeoutError: A cell timed out while it was being executed, after 150 seconds.
+The message was: Cell execution timed out.
+Here is a preview of the cell contents:
+-------------------
+%%capture
+(pi_samp_lg, pi_feat_lg), _ = scootr_sink.agw_scootr(X, y, Dx_knn, Dy_knn, alpha=0.1, sample_eps=1, feature_eps=1, sample_uot_mode='sinkhorn', feature_uot_mode='sinkhorn', verbose=True, log=False)
 
+(pi_samp_med, pi_feat_med), _ = scootr_sink.agw_scootr(X, y, Dx_knn, Dy_knn, alpha=0.1, sample_eps=1e-3, feature_eps=1e-3, sample_uot_mode='sinkhorn', feature_uot_mode='sinkhorn', verbose=True, log=False)
 
-[0;31m---------------------------------------------------------------------------[0m
-[0;31mNameError[0m                                 Traceback (most recent call last)
-Cell [0;32mIn[26], line 1[0m
-[0;32m----> 1[0m aligned_y_unsup [38;5;241m=[39m scootr_sink[38;5;241m.[39mget_barycentre(X, [43mpi_samp_unsup[49m)
-[1;32m      2[0m aligned_y_medsup [38;5;241m=[39m scootr_sink[38;5;241m.[39mget_barycentre(X, pi_samp_medsup)
-[1;32m      3[0m aligned_y_fullsup [38;5;241m=[39m scootr_sink[38;5;241m.[39mget_barycentre(X, pi_samp_fullsup)
-
-[0;31mNameError[0m: name 'pi_samp_unsup' is not defined
+(pi_samp_sm, pi_feat_sm), _ = scootr_sink.agw_scootr(X, y, Dx_knn, Dy_knn, alpha=0.1, sample_eps=5e-4, feature_eps=5e-4, sample_uot_mode='sinkhorn', feature_uot_mode='sinkhorn', verbose=True, log=False)
+-------------------
 

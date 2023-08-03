@@ -652,7 +652,7 @@ CUDNN version: None
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/9dd3b0b5af434403aee8a1f510ee63b2837b836cfc288751afa633d9038d2605.png" src="_images/9dd3b0b5af434403aee8a1f510ee63b2837b836cfc288751afa633d9038d2605.png" />
+<img alt="_images/92bdc646b35ab347529919eb48a42b7b42fb9734c2ca670bdfe6ab6974b8d223.png" src="_images/92bdc646b35ab347529919eb48a42b7b42fb9734c2ca670bdfe6ab6974b8d223.png" />
 </div>
 </div>
 <p>Note that the alignments look nice (the shapes match up well). This property does not guarantee a good alignment, as we can see by our high original FOSCTTM score. In fact, it is more a representation of the sparsity of the coupling matrix – if the coupling matrix is very sparse, it will get close to attempting a 1-1 matching, which could be wrong (even though it is 1-1). Having a coupling matrix that is too sparse can be quite dangerous in cases where there is no underlying 1-1 sample map.</p>
@@ -817,7 +817,7 @@ Total sum of differences: 0.014399499632418156
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/08615328cea68e1bf96ecb726b25b06a4d0bde399a653980c333b3fa82b3187b.png" src="_images/08615328cea68e1bf96ecb726b25b06a4d0bde399a653980c333b3fa82b3187b.png" />
+<img alt="_images/1b65e5d6170e0ff6594ebc96ae9c23b2a70d65ec55bd77de1b323123ceffb5ad.png" src="_images/1b65e5d6170e0ff6594ebc96ae9c23b2a70d65ec55bd77de1b323123ceffb5ad.png" />
 </div>
 </div>
 <p>As we can see, the projected data has little to no variance with respect to the principal components of our anchor domain. We can interpret this to mean that every point in the domain being projected was projected to an average of every point in the anchor domain; since the coupling matrix was so dense, projection just led to a weighted average of points where the weights were much closer to even. So, <span class="math notranslate nohighlight">\(\epsilon\)</span> too high and too low both have their setbacks.</p>

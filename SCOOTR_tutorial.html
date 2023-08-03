@@ -840,37 +840,7 @@ CUDNN version: None
 </section>
 <section id="supervision-extension-of-fused-formulation-to-scootr">
 <h2>Supervision (Extension of Fused Formulation to SCOOTR)<a class="headerlink" href="#supervision-extension-of-fused-formulation-to-scootr" title="Permalink to this heading">#</a></h2>
-<p><em>WILL FINALIZE AFTER TALKING TO PINAR</em></p>
-<p>SCOOTR allows for supervision in a similar way to UCOOT/UGW. [FILL IN THEORY]. In particular, we can input our supervision to D_mult = (D_mult_samp, D_mult_feat). In order to examine how supervision can help, let’s try supervising on the feature level and seeing how the scores improve.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>SCOOTR does not have the alpha parameter we had in UCOOT/UGW supervision; instead, scale your supervision matrix appropriately by your desired value for the old alpha before input.</p>
-</div>
-<p>(pi_samp_unsup, pi_feat_unsup), _ = scootr_sink.agw_scootr(X, y, Dx_knn, Dy_knn, alpha=0.1, D_mult=(None, np.fill_diagonal(np.ones((X.shape[0], y.shape[0])), 1)), sample_eps=0.001, feature_eps=0.001, sample_uot_mode=’sinkhorn’, feature_uot_mode=’sinkhorn’, verbose=True, log=False)</p>
-<p>(pi_samp_medsup, pi_feat_medsup), _ = scootr_sink.agw_scootr(X, y, Dx_knn, Dy_knn, alpha=0.1, D_mult=(None, np.fill_diagonal(np.ones((X.shape[0], y.shape[0])), 0.5)), sample_eps=0.001, feature_eps=0.001, sample_uot_mode=’sinkhorn’, feature_uot_mode=’sinkhorn’, verbose=True, log=False)</p>
-<p>(pi_samp_fullsup, pi_feat_fullsup), _ = scootr_sink.agw_scootr(X, y, Dx_knn, Dy_knn, alpha=0.1, D_mult=(None, np.fill_diagonal(np.ones((X.shape[0], y.shape[0])), 0)), sample_eps=0.001, feature_eps=0.001, sample_uot_mode=’sinkhorn’, feature_uot_mode=’sinkhorn’, verbose=True, log=False)</p>
-<p>aligned_y_unsup = scootr_sink.get_barycentre(X, pi_samp_unsup)
-aligned_y_medsup = scootr_sink.get_barycentre(X, pi_samp_medsup)
-aligned_y_fullsup = scootr_sink.get_barycentre(X, pi_samp_fullsup)</p>
-<p>We can score and visualize:</p>
-<p>for aligned_y, mode in [(aligned_y_unsup, ‘unsupervised’), (aligned_y_medsup, ‘some supervision’), (aligned_y_fullsup, ‘full supervision’)]:
-fracs = scootr_sink.calc_domainAveraged_FOSCTTM(X, aligned_y)
-print(“Average FOSCTTM score for this alignment ({0}) with X onto Y is:”.format(mode), np.mean(fracs))
-legend_label=”SCOOTR alignment FOSCTTM \n average value for {0}: “.format(mode)+str(np.mean(fracs))
-plt.plot(np.arange(len(fracs)), np.sort(fracs), “b–”, label=legend_label)
-plt.legend()
-plt.xlabel(“Cells”)
-plt.ylabel(“Sorted FOSCTTM”)
-plt.show()</p>
-<p>for pi_feat, pi_samp, mode in [(pi_feat_unsup, pi_samp_unsup, ‘unsupervised’), (pi_feat_medsup, pi_samp_medsup, ‘some supervision’), (pi_feat_fullsup, pi_samp_fullsup, ‘full supervision’)]:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>_, (ax1, ax2) = plt.subplots(1, 2, figsize=(12,5))
-
-sns.heatmap(pd.DataFrame(pi_feat, index=X_annotated.columns, columns=y_annotated.columns), ax=ax1, cmap=&#39;Blues&#39;, square=True)
-ax2.spy(pi_samp, precision=0.0001, markersize=3)
-plt.show()
-</pre></div>
-</div>
-<p><em>analyze results</em></p>
+<p><em>THIS SECTION IS STILL UNDER DEVELOPMENT</em></p>
 <p>In one of our application notebooks, we examine potential ways to generate sample and feature supervision matrices given cell types (sample supervision) prior knowledge (feature supervision).</p>
 <p>We have now concluded the SCOOTR tutorial. The key differences between SCOOTR and UCOOT/UGW are:</p>
 <ol class="arabic simple">
